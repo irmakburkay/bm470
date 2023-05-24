@@ -9,7 +9,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import tr.edu.duzce.mf.bm.bm470.model.Blog;
 import tr.edu.duzce.mf.bm.bm470.model.User;
 
-import javax.sql.DataSource;
 import java.util.Properties;
 
 import static org.hibernate.cfg.AvailableSettings.*;
