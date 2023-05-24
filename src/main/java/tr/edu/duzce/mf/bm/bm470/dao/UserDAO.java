@@ -16,10 +16,10 @@ import java.util.List;
 @Repository
 public class UserDAO {
     @Autowired
-    private SessionFactory sessionFactory;
+    private SessionFactory sessionFactoryy;
 
     private Session getCurrentSession(){
-        return sessionFactory.openSession();
+        return sessionFactoryy.openSession();
     }
 
     public boolean saveOrUpdateObject(Object object){
