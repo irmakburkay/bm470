@@ -3,8 +3,8 @@ package tr.edu.duzce.mf.bm.bm470.dao;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import tr.edu.duzce.mf.bm.bm470.model.Blog;
 import tr.edu.duzce.mf.bm.bm470.model.User;
 
 import javax.persistence.criteria.CriteriaBuilder;
@@ -15,6 +15,7 @@ import java.util.List;
 
 @Repository
 public class UserDAO {
+    @Autowired
     private SessionFactory sessionFactory;
 
     private Session getCurrentSession(){
