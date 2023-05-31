@@ -7,6 +7,7 @@ import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import tr.edu.duzce.mf.bm.bm470.model.Blog;
+import tr.edu.duzce.mf.bm.bm470.model.User;
 
 import javax.sql.DataSource;
 import java.util.Properties;
@@ -61,7 +62,7 @@ public class AppConfig {
 
 
         factoryBean.setHibernateProperties(props);
-        factoryBean.setAnnotatedClasses(Blog.class);
+        factoryBean.setAnnotatedClasses(Blog.class, User.class);
         return factoryBean;
     }
 

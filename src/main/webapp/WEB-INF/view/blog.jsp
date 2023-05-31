@@ -13,7 +13,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Listeleme JSP</title>
+    <title>Blog Listele</title>
 </head>
 <body>
 <h1>Blog Listesi</h1>
@@ -23,17 +23,21 @@
         <th>ID</th>
         <th>Başlık</th>
         <th>İçerik</th>
-        <th>Tarih</th>
+        <th>Aktif Mi?</th>
+        <th>Oluşturma Tarihi</th>
+        <th>Değiştirme Tarihi</th>
     </tr>
 
     ${partialView}
 
     <c:forEach items="${blogList}" var="blogItem" >
         <tr>
-            <td>${blogItem.id}</td>
-            <td>${blogItem.baslik}</td>
-            <td>${blogItem.icerik}</td>
-            <td><fmt:formatDate value="${blogItem.tarih}" pattern="dd/MM/yyyy" /> </td>
+            <td>${blogItem.blogID}</td>
+            <td>${blogItem.title}</td>
+            <td>${blogItem.content}</td>
+            <td>${blogItem.isActive}</td>
+            <td><fmt:formatDate value="${blogItem.creationDate}" pattern="dd/MM/yyyy" /> </td>
+            <td><fmt:formatDate value="${blogItem.lastChangeDate}" pattern="dd/MM/yyyy" /> </td>
         </tr>
     </c:forEach>
 
