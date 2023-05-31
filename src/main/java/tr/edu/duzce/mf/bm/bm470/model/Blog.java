@@ -1,5 +1,7 @@
 package tr.edu.duzce.mf.bm.bm470.model;
 
+import org.hibernate.annotations.ColumnDefault;
+
 import javax.persistence.*;
 
 import java.io.Serializable;
@@ -13,45 +15,82 @@ public class Blog implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id", nullable = false)
-    private Long id;
-    @Column(name = "baslik", nullable = false)
-    private String baslik;
-    @Column(name = "icerik", nullable = false)
-    private String icerik;
-    @Column(name = "tarih", nullable = false)
-    @Temporal(TemporalType.DATE)
-    private Date tarih;
+    @Column(name = "blogID", nullable = false)
+    private Long blogID;
+    @Column(name = "title", nullable = false, length = 45)
+    private String title;
+    @Column(name = "content", nullable = false, length = 450)
+    private String content;
+    @Column(name = "creationDate", nullable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    @ColumnDefault( value = "CURRENT_TIMESTAMP" )
+    private Date creationDate;
 
-    public Long getId() {
-        return id;
+    @Column(name = "lastChangeDate", nullable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    @ColumnDefault( value = "CURRENT_TIMESTAMP" )
+    private Date lastChangeDate;
+
+    @Column(name = "isActive", nullable = false, columnDefinition = "boolean default true")
+    private boolean isActive;
+
+    @ManyToOne
+    @JoinColumn(name = "user", referencedColumnName = "userID")
+    private User user;
+
+    public Long getBlogID() {
+        return blogID;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setBlogID(Long blogID) {
+        this.blogID = blogID;
     }
 
-    public String getBaslik() {
-        return baslik;
+    public String getTitle() {
+        return title;
     }
 
-    public void setBaslik(String baslik) {
-        this.baslik = baslik;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
-    public String getIcerik() {
-        return icerik;
+    public String getContent() {
+        return content;
     }
 
-    public void setIcerik(String icerik) {
-        this.icerik = icerik;
+    public void setContent(String content) {
+        this.content = content;
     }
 
-    public Date getTarih() {
-        return tarih;
+    public Date getCreationDate() {
+        return creationDate;
     }
 
-    public void setTarih(Date tarih) {
-        this.tarih = tarih;
+    public void setCreationDate(Date creationDate) {
+        this.creationDate = creationDate;
+    }
+
+    public Date getLastChangeDate() {
+        return lastChangeDate;
+    }
+
+    public void setLastChangeDate(Date lastChangeDate) {
+        this.lastChangeDate = lastChangeDate;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public boolean getIsActive() {
+        return isActive;
+    }
+
+    public void setIsActive(boolean isActive) {
+        this.isActive = isActive;
     }
 }

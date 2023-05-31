@@ -16,6 +16,10 @@ public class BlogService {
     @Autowired
     private BlogDAO blogDAO;
 
+    public void addBlog(Blog blog) {
+        blogDAO.saveOrUpdateObject(blog);
+    }
+
     public List<Blog> loadBlogs() {
         List<Blog> blogList = blogDAO.getAllBlogs();
         return blogList;

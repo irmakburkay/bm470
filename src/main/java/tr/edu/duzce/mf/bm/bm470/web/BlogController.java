@@ -33,10 +33,12 @@ public class BlogController {
         String partialView = "";
         for (Blog blog : blogList) {
             partialView += "<tr>";
-            partialView += "<td>" + blog.getId() + "</td>";
-            partialView += "<td>" + blog.getBaslik() + "</td>";
-            partialView += "<td>" + blog.getIcerik() + "</td>";
-            partialView += "<td>" + convertTime(blog.getTarih()) + "</td>";
+            partialView += "<td>" + blog.getBlogID() + "</td>";
+            partialView += "<td>" + blog.getTitle() + "</td>";
+            partialView += "<td>" + blog.getContent() + "</td>";
+            partialView += "<td>" + blog.getIsActive() + "</td>";
+            partialView += "<td>" + convertTime(blog.getCreationDate()) + "</td>";
+            partialView += "<td>" + convertTime(blog.getLastChangeDate()) + "</td>";
             partialView += "</tr>";
         }
         model.addAttribute("partialView", partialView);
