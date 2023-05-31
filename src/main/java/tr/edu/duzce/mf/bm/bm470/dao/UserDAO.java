@@ -24,11 +24,16 @@ public class UserDAO {
 
     public boolean saveOrUpdateObject(Object object){
         boolean success = true;
+        Session session = getCurrentSession();
         try {
-            Serializable s = getCurrentSession().save(object);
+            session.beginTransaction();
+            session.save(object);
+            session.getTransaction().commit();
         } catch (Exception e) {
             e.printStackTrace();
             success = false;
+        } finally {
+            session.close();
         }
         return success;
     }

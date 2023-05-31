@@ -16,6 +16,7 @@ public class BlogService {
     @Autowired
     private BlogDAO blogDAO;
 
+    @Transactional(readOnly = false)
     public void addBlog(Blog blog) {
         blogDAO.saveOrUpdateObject(blog);
     }
