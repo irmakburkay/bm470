@@ -20,7 +20,13 @@ public class BlogDAO {
     private SessionFactory sessionFactory;
 
     private Session getCurrentSession() {
-        return sessionFactory.openSession();
+        Session session;
+        try {
+            session = sessionFactory.getCurrentSession();
+        } catch (Exception e) {
+            session = sessionFactory.openSession();
+        }
+        return session;
     }
 
     public Object loadObject(Class clazz, Serializable id) {
@@ -29,11 +35,16 @@ public class BlogDAO {
 
     public boolean saveOrUpdateObject(Object object) {
         boolean success = true;
+        Session session = getCurrentSession();
         try {
-            Serializable s = getCurrentSession().save(object);
+            session.beginTransaction();
+            session.save(object);
+            session.getTransaction().commit();
         } catch (Exception e) {
             e.printStackTrace();
             success = false;
+        } finally {
+            session.close();
         }
         return success;
     }
@@ -60,6 +71,36 @@ public class BlogDAO {
         List<Blog> blogList = dbQuery.getResultList();
 
         return blogList;
+    }
+
+    public List<Blog> getBlogsWithPage(int pageNumber) {
+        Session currentSession = getCurrentSession();
+        CriteriaBuilder criteriaBuilder = currentSession.getCriteriaBuilder();
+        CriteriaQuery<Blog> criteriaQuery = criteriaBuilder.createQuery(Blog.class);
+        Root<Blog> root = criteriaQuery.from(Blog.class);
+
+        criteriaQuery.select(root);
+
+        Query<Blog> dbQuery = currentSession.createQuery(criteriaQuery);
+        dbQuery.setFirstResult(pageNumber * 5);
+        dbQuery.setMaxResults(5);
+
+        List<Blog> blogList = dbQuery.getResultList();
+
+        return blogList;
+    }
+
+    public Long getBlogCount() {
+        Session currentSession = getCurrentSession();
+        CriteriaBuilder criteriaBuilder = currentSession.getCriteriaBuilder();
+        CriteriaQuery<Long> criteriaQuery = criteriaBuilder.createQuery(Long.class);
+        Root<Blog> root = criteriaQuery.from(Blog.class);
+
+        criteriaQuery.select(criteriaBuilder.count(root));
+
+        Query<Long> dbQuery = currentSession.createQuery(criteriaQuery);
+        Long totalCount = dbQuery.getSingleResult();
+        return totalCount;
     }
 
 }
