@@ -11,6 +11,14 @@
         .table-row{
             cursor:pointer;
         }
+        .content {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            background-color: azure;
+            width: 70%;
+            height: max-content
+        }
     </style>
 
 <%--    js script--%>
@@ -27,42 +35,9 @@
 
 </head>
 <body>
-<header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
-    <div class="col-md-3 mb-2 mb-md-0">
-        <a href="/" class="d-inline-flex link-body-emphasis text-decoration-none">
-            <svg class="bi" width="40" height="32" role="img" aria-label="Bootstrap"><use xlink:href="#bootstrap"/></svg>
-        </a>
-    </div>
+<jsp:include page="header.jsp"/>
 
-    <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
-        <li><a href="#" class="nav-link px-2 link-secondary">Home</a></li>
-        <li><a href="#" class="nav-link px-2">Features</a></li>
-        <li><a href="#" class="nav-link px-2">Pricing</a></li>
-        <li><a href="#" class="nav-link px-2">FAQs</a></li>
-        <li><a href="#" class="nav-link px-2">About</a></li>
-    </ul>
-
-    <div class="col-md-3 text-end">
-        <table>
-            <tr>
-                <td>
-                    <form action="/bm470/user/login" method="post">
-                        <input class="btn btn-outline-primary me-2" type="submit" value="Giriş Yap">
-                    </form>
-                </td>
-                <td>
-                    <form action="/bm470/user/register" method="post">
-                        <input class="btn btn-primary" type="submit" value="Kaydol">
-                    </form>
-                </td>
-            </tr>
-        </table>
-        <%--        <button type="button" class="btn btn-outline-primary me-2" id="btn_login">Giriş Yap</button>--%>
-        <%--        <button type="button" class="btn btn-primary" id="btn_kaydol">Kaydol</button>--%>
-    </div>
-</header>
-
-<div class="container" style="background-color: azure; width: 70%; height: max-content">
+<div class="container content" style="background-color: azure; width: 70%; height: max-content">
 
     <div class="row mb-3">
 

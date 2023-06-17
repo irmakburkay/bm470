@@ -7,13 +7,9 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <style>
-  .footer {
-    position: fixed;
-    left: 0;
-    bottom: 0;
-    width: 100%;
-    text-align: center;
-  }
+    .footer {
+        flex-grow: 1;
+    }
 </style>
 <footer class="bg-dark footer">
   <div class="container text-light text-center">

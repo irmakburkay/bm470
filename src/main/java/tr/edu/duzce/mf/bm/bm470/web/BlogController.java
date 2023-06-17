@@ -50,4 +50,22 @@ public class BlogController {
         return sdf.format(time);
     }
 
+    @ModelAttribute("blog")
+    public Blog setBlog(){
+        return new Blog();
+    }
+
+    @GetMapping("/post")
+    public String showBlogForm(){
+        return "addblog";
+    }
+
+    @RequestMapping(value = "/saveblog", method = RequestMethod.POST)
+    public String saveBlog(@ModelAttribute("blog") Blog blog, Model model){
+        blogService.addBlog(blog);
+
+        model.addAttribute("meesage", "Kayıt Başarılı");
+        model.addAttribute("blog", blog);
+        return "blog";
+    }
 }
