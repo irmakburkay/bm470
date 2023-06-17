@@ -19,7 +19,13 @@ public class UserDAO {
     private SessionFactory sessionFactory;
 
     private Session getCurrentSession(){
-        return sessionFactory.openSession();
+        Session session;
+        try {
+            session = sessionFactory.getCurrentSession();
+        } catch (Exception e) {
+            session = sessionFactory.openSession();
+        }
+        return session;
     }
 
     public boolean saveOrUpdateObject(Object object){
