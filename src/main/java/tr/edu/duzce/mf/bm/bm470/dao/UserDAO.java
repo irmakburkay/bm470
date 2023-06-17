@@ -9,6 +9,7 @@ import tr.edu.duzce.mf.bm.bm470.model.User;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.io.Serializable;
 import java.util.List;
@@ -67,5 +68,55 @@ public class UserDAO {
         List<User> userList = dbQuery.getResultList();
 
         return userList;
+    }
+
+    public User checkUserExists(User user){
+        Session session = getCurrentSession();
+        CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+        CriteriaQuery<User> criteriaQuery = criteriaBuilder.createQuery(User.class);
+        Root<User> root = criteriaQuery.from(User.class);
+        Predicate predicateUsername = criteriaBuilder.equal(root.get("username"), user.getUsername());
+        Predicate predicatePassword = criteriaBuilder.equal(root.get("password"), user.getPassword());
+        criteriaQuery.select(root).where(criteriaBuilder.and(predicateUsername, predicatePassword));
+        Query<User> query = session.createQuery(criteriaQuery);
+        try{
+            return query.getSingleResult();
+        }catch (Exception e){
+            return null;
+        }
+
+    }
+    public boolean checkUsernameExists(String username){
+        Session session = getCurrentSession();
+        CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+        CriteriaQuery<User> criteriaQuery = criteriaBuilder.createQuery(User.class);
+        Root<User> root = criteriaQuery.from(User.class);
+        Predicate predicateUsername = criteriaBuilder.equal(root.get("username"), username);
+
+        criteriaQuery.select(root).where(predicateUsername);
+        Query<User> query = session.createQuery(criteriaQuery);
+        try{
+            User returnedUser = query.getSingleResult();
+            return true;
+        }catch (Exception e){
+            return false;
+        }
+    }
+
+    public boolean checkEmailExists(String email){
+        Session session = getCurrentSession();
+        CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+        CriteriaQuery<User> criteriaQuery = criteriaBuilder.createQuery(User.class);
+        Root<User> root = criteriaQuery.from(User.class);
+        Predicate predicateUsername = criteriaBuilder.equal(root.get("email"), email);
+
+        criteriaQuery.select(root).where(predicateUsername);
+        Query<User> query = session.createQuery(criteriaQuery);
+        try{
+            User returnedUser = query.getSingleResult();
+            return true;
+        }catch (Exception e){
+            return false;
+        }
     }
 }

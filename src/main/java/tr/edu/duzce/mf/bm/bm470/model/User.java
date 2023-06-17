@@ -4,6 +4,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
 
+
 @Entity
 @Table(name = "user", schema = "bm470")
 public class User implements Serializable {
@@ -16,6 +17,7 @@ public class User implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "userID", nullable = false)
     private Long userID;
+
     @Column(name = "username", nullable = false)
     private String username;
     @Column(name = "password", nullable = false)
@@ -30,6 +32,7 @@ public class User implements Serializable {
 
     public void setUserID(Long userID) {
         this.userID = userID;
+
     }
 
     public String getUsername() {

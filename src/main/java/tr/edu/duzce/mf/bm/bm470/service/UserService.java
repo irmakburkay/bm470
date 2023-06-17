@@ -16,7 +16,6 @@ public class UserService {
     @Autowired
     private UserDAO userDAO;
 
-    @Transactional(readOnly = false)
     public void addUser(User user) {
         userDAO.saveOrUpdateObject(user);
     }
@@ -24,6 +23,17 @@ public class UserService {
     public List<User> loadUsers() {
         List<User> userList = userDAO.getAllUsers();
         return userList;
+    }
+
+    public User checkUserExists(User user){
+        return userDAO.checkUserExists(user);
+    }
+    public boolean checkUsernameExists(String username){
+        return userDAO.checkUsernameExists(username);
+    }
+
+    public boolean checkEmailExists(String email){
+        return userDAO.checkEmailExists(email);
     }
 
 }
