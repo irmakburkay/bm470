@@ -26,4 +26,14 @@ public class BlogService {
         return blogList;
     }
 
+    public List<Blog> loadBlogs(int pageNumber) {
+        List<Blog> blogList = blogDAO.getBlogsWithPage(pageNumber);
+        return blogList;
+    }
+
+    public Blog loadBlogById(Long id) {
+        Blog blog = (Blog) blogDAO.loadObject(Blog.class, id);
+        return blog;
+    }
+
 }

@@ -1,21 +1,23 @@
 package tr.edu.duzce.mf.bm.bm470.web;
 
+import com.mysql.cj.xdevapi.JsonParser;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 import tr.edu.duzce.mf.bm.bm470.model.Blog;
 import tr.edu.duzce.mf.bm.bm470.service.BlogService;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 @Controller
@@ -25,25 +27,22 @@ public class BlogController {
     @Autowired
     private BlogService blogService;
 
-    @GetMapping("/")
-    public String getAllBlogs(Model model) {
-        List<Blog> blogList = blogService.loadBlogs();
+    @GetMapping("/{blogId}")
+    public ModelAndView getBlogById(@PathVariable("blogId") String stringId, Model model) {
+
+        Blog blog;
+
+        try {
+            blog = blogService.loadBlogById(Long.parseLong(stringId));
+        } catch (Exception e) {
+            return new ModelAndView("redirect:/");
+        }
+
+        List<Blog> blogList = new ArrayList<>();
+        blogList.add(blog);
         model.addAttribute("blogList", blogList);
 
-        String partialView = "";
-        for (Blog blog : blogList) {
-            partialView += "<tr>";
-            partialView += "<td>" + blog.getBlogID() + "</td>";
-            partialView += "<td>" + blog.getTitle() + "</td>";
-            partialView += "<td>" + blog.getContent() + "</td>";
-            partialView += "<td>" + blog.getIsActive() + "</td>";
-            partialView += "<td>" + convertTime(blog.getCreationDate()) + "</td>";
-            partialView += "<td>" + convertTime(blog.getLastChangeDate()) + "</td>";
-            partialView += "</tr>";
-        }
-        model.addAttribute("partialView", partialView);
-
-        return "blog";
+        return new ModelAndView("blog");
     }
 
     private String convertTime(Date time) {
