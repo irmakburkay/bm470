@@ -16,6 +16,7 @@ public class BlogService {
     @Autowired
     private BlogDAO blogDAO;
 
+    @Transactional(readOnly = false)
     public void addBlog(Blog blog) {
         blogDAO.saveOrUpdateObject(blog);
     }
@@ -23,6 +24,16 @@ public class BlogService {
     public List<Blog> loadBlogs() {
         List<Blog> blogList = blogDAO.getAllBlogs();
         return blogList;
+    }
+
+    public List<Blog> loadBlogs(int pageNumber) {
+        List<Blog> blogList = blogDAO.getBlogsWithPage(pageNumber);
+        return blogList;
+    }
+
+    public Blog loadBlogById(Long id) {
+        Blog blog = (Blog) blogDAO.loadObject(Blog.class, id);
+        return blog;
     }
 
 }

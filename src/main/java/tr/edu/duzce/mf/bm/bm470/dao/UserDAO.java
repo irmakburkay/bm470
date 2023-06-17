@@ -19,16 +19,27 @@ public class UserDAO {
     private SessionFactory sessionFactory;
 
     private Session getCurrentSession(){
-        return sessionFactory.openSession();
+        Session session;
+        try {
+            session = sessionFactory.getCurrentSession();
+        } catch (Exception e) {
+            session = sessionFactory.openSession();
+        }
+        return session;
     }
 
     public boolean saveOrUpdateObject(Object object){
         boolean success = true;
+        Session session = getCurrentSession();
         try {
-            Serializable s = getCurrentSession().save(object);
+            session.beginTransaction();
+            session.save(object);
+            session.getTransaction().commit();
         } catch (Exception e) {
             e.printStackTrace();
             success = false;
+        } finally {
+            session.close();
         }
         return success;
     }

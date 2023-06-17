@@ -16,6 +16,7 @@ public class UserService {
     @Autowired
     private UserDAO userDAO;
 
+    @Transactional(readOnly = false)
     public void addUser(User user) {
         userDAO.saveOrUpdateObject(user);
     }

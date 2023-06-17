@@ -28,8 +28,6 @@
         <th>Değiştirme Tarihi</th>
     </tr>
 
-    ${partialView}
-
     <c:forEach items="${blogList}" var="blogItem" >
         <tr>
             <td>${blogItem.blogID}</td>

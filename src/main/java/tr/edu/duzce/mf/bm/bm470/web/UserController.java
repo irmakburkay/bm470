@@ -22,6 +22,11 @@ public class UserController {
 
     @GetMapping("/")
     public String getAllBlogs(Model model) {
+        User us1 = new User();
+        us1.setUsername("sadfasdf");
+        us1.setPassword("asdfa");
+        us1.setEmail("asdf");
+        userService.addUser(us1);
         List<User> userList = userService.loadUsers();
         model.addAttribute("userList", userList);
 

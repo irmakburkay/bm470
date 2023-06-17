@@ -11,7 +11,11 @@ import java.util.Date;
 @Table(name = "blog", schema = "bm470")
 public class Blog implements Serializable {
 
-    //isim aynıysa name ile belirtmene gerek yok
+    public Blog() {
+        setIsActive(true);
+        setCreationDate(new Date());
+        setLastChangeDate(new Date());
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -23,15 +27,13 @@ public class Blog implements Serializable {
     private String content;
     @Column(name = "creationDate", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
-    @ColumnDefault( value = "CURRENT_TIMESTAMP" )
     private Date creationDate;
 
     @Column(name = "lastChangeDate", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
-    @ColumnDefault( value = "CURRENT_TIMESTAMP" )
     private Date lastChangeDate;
 
-    @Column(name = "isActive", nullable = false, columnDefinition = "boolean default true")
+    @Column(name = "isActive", nullable = false)
     private boolean isActive;
 
     @ManyToOne

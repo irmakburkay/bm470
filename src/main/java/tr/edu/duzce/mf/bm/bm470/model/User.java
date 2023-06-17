@@ -8,6 +8,10 @@ import java.util.List;
 @Table(name = "user", schema = "bm470")
 public class User implements Serializable {
 
+    public User() {
+        setIsActive(true);
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "userID", nullable = false)
@@ -19,7 +23,7 @@ public class User implements Serializable {
     @Column(name = "email", nullable = false)
     private String email;
 
-    @Column(name = "isActive", nullable = false, columnDefinition = "boolean default true")
+    @Column(name = "isActive", nullable = false)
     private boolean isActive;
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Blog> blogList;
