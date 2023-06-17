@@ -14,6 +14,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.resource.PathResourceResolver;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
+import tr.edu.duzce.mf.bm.bm470.interceptor.AuthInterceptor;
 import tr.edu.duzce.mf.bm.bm470.interceptor.RequestInterceptor;
 
 import java.nio.charset.Charset;
@@ -67,5 +68,8 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new RequestInterceptor()).addPathPatterns("/*");
+        List<String> paths = new ArrayList<>();
+        paths.add("/user/profile");
+        registry.addInterceptor((new AuthInterceptor())).addPathPatterns(paths);
     }
 }

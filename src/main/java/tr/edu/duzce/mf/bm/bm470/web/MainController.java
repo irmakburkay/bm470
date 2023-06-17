@@ -1,5 +1,6 @@
 package tr.edu.duzce.mf.bm.bm470.web;
 
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -25,7 +26,24 @@ public class MainController {
     private UserService userService;
 
     @GetMapping(value = "/")
-    public String index(Model model) {
+    public String index(Model model, HttpSession session) {
+        if(session.getAttribute("loginUser") == null){
+            // button textleri için
+            model.addAttribute("login_logout_text", "Giriş Yap");
+            model.addAttribute("register_profile_text", "Kaydol");
+            // linkler için
+            model.addAttribute("login_logout_link", "login");
+            model.addAttribute("register_profile_link", "register");
+        }
+        else{
+            // button textleri için
+            model.addAttribute("login_logout_text", "Çıkış_Yap");
+            model.addAttribute("register_profile_text", "Profil");
+            // linkler için
+            model.addAttribute("login_logout_link", "logout");
+            model.addAttribute("register_profile_link", "profile");
+        }
+
         User user1 = new User();
         user1.setEmail("ahmet@gmail.com");
         user1.setUsername("ahmet");
