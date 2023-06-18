@@ -70,10 +70,12 @@ public class BlogDAO {
         Query<Blog> dbQuery = currentSession.createQuery(criteriaQuery);
         List<Blog> blogList = dbQuery.getResultList();
 
+        currentSession.close();
+
         return blogList;
     }
 
-    public List<Blog> getBlogsWithPage(int pageNumber) {
+    public List<Blog> getBlogsWithPaging(int pageNumber, int maxResult) {
         Session currentSession = getCurrentSession();
         CriteriaBuilder criteriaBuilder = currentSession.getCriteriaBuilder();
         CriteriaQuery<Blog> criteriaQuery = criteriaBuilder.createQuery(Blog.class);
@@ -82,10 +84,12 @@ public class BlogDAO {
         criteriaQuery.select(root);
 
         Query<Blog> dbQuery = currentSession.createQuery(criteriaQuery);
-        dbQuery.setFirstResult(pageNumber * 5);
-        dbQuery.setMaxResults(5);
+        dbQuery.setFirstResult(pageNumber * maxResult);
+        dbQuery.setMaxResults(maxResult);
 
         List<Blog> blogList = dbQuery.getResultList();
+
+        currentSession.close();
 
         return blogList;
     }
@@ -100,6 +104,9 @@ public class BlogDAO {
 
         Query<Long> dbQuery = currentSession.createQuery(criteriaQuery);
         Long totalCount = dbQuery.getSingleResult();
+
+        currentSession.close();
+
         return totalCount;
     }
 

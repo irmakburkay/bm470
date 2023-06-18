@@ -34,6 +34,7 @@ public class BlogController {
 
         try {
             blog = blogService.loadBlogById(Long.parseLong(stringId));
+            if (blog == null) throw new Exception();
         } catch (Exception e) {
             return new ModelAndView("redirect:/");
         }
