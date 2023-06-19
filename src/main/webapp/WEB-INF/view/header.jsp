@@ -36,7 +36,5 @@
                 </td>
             </tr>
         </table>
-        <%--        <button type="button" class="btn btn-outline-primary me-2" id="btn_login">Giriş Yap</button>--%>
-        <%--        <button type="button" class="btn btn-primary" id="btn_kaydol">Kaydol</button>--%>
     </div>
 </header>
