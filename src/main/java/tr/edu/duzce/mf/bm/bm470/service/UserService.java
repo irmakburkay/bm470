@@ -25,6 +25,10 @@ public class UserService {
         return userList;
     }
 
+    public User getUserById(Long id){
+        return userDAO.getUserById(id);
+    }
+
     public User checkUserExists(User user){
         return userDAO.checkUserExists(user);
     }
