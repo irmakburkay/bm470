@@ -1,6 +1,7 @@
 package tr.edu.duzce.mf.bm.bm470.web;
 
 import jakarta.servlet.http.HttpSession;
+import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -11,9 +12,11 @@ import tr.edu.duzce.mf.bm.bm470.model.User;
 import tr.edu.duzce.mf.bm.bm470.service.BlogService;
 import tr.edu.duzce.mf.bm.bm470.service.UserService;
 
+import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 @Controller
 @RequestMapping(value = "/", method = RequestMethod.GET)
@@ -44,20 +47,47 @@ public class MainController {
             model.addAttribute("register_profile_link", "profile");
         }
 
-        User user1 = new User();
-        user1.setEmail("ahmet@gmail.com");
-        user1.setUsername("ahmet");
-        user1.setPassword("ahmet123");
-        userService.addUser(user1);
-        Blog blog1 = new Blog();
-        blog1.setTitle("blog1_title");
-        blog1.setContent("blog1_content");
-        blog1.setUser(user1);
-        blogService.addBlog(blog1);
+//        Random r = new Random();
+//        String alphabet = "abcdefghijklmnopqrstuvwxyz";
+//        String number = "0123456789";
+//        StringBuilder username = new StringBuilder();
+//        StringBuilder password = new StringBuilder();
+//        for (int i = 0; i < 6; i++)
+//            username.append(alphabet.charAt(r.nextInt(alphabet.length())));
+//        for (int i = 0; i < 4; i++)
+//            password.append(number.charAt(r.nextInt(number.length())));
 
-        List<Blog> blogList = blogService.loadBlogs();
+//        User user = new User();
+//        user.setEmail(username + "@gmail.com");
+//        user.setUsername(username.toString());
+//        user.setPassword(password.toString());
+//        userService.addUser(user);
+//        Blog blog = new Blog();
+//        blog.setTitle("blog_title");
+//        blog.setContent("blog_content");
+//        blog.setUser(user);
+//        blogService.addBlog(blog);
+
+        return "forward:/page?pageNumber=0&maxResult=5";
+    }
+
+    @GetMapping("/page")
+    public String pagination(@RequestParam("pageNumber") int pageNumber, @RequestParam("maxResult") int maxResult, Model model) {
+        List<Blog> blogList;
+        try {
+            blogList = blogService.loadBlogsWithPaging(pageNumber, maxResult);
+            if (blogList.isEmpty()) throw new Exception();
+        } catch (Exception e) {
+            pageNumber = 0;
+            maxResult = 5;
+            blogList = blogService.loadBlogsWithPaging(pageNumber, maxResult);
+        }
         model.addAttribute("blogList", blogList);
-
+        Long blogSize = blogService.getBlogCount();
+        int pageSize = (int) Math.ceil(blogSize / (double) maxResult);
+        model.addAttribute("pageSize", pageSize);
+        model.addAttribute("pageNumber", pageNumber);
+        model.addAttribute("maxResult", maxResult);
         return "index";
     }
 
