@@ -26,14 +26,19 @@ public class BlogService {
         return blogList;
     }
 
-    public List<Blog> loadBlogs(int pageNumber) {
-        List<Blog> blogList = blogDAO.getBlogsWithPage(pageNumber);
+    public List<Blog> loadBlogsWithPaging(int pageNumber, int maxResult) {
+        List<Blog> blogList = blogDAO.getBlogsWithPaging(pageNumber, maxResult);
         return blogList;
     }
 
     public Blog loadBlogById(Long id) {
         Blog blog = (Blog) blogDAO.loadObject(Blog.class, id);
         return blog;
+    }
+
+    public Long getBlogCount() {
+        Long blogSize = blogDAO.getBlogCount();
+        return blogSize;
     }
 
 }

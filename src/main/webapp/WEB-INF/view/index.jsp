@@ -8,7 +8,7 @@
 
 <%--    css style--%>
     <style>
-        .table-row{
+        .card-click{
             cursor:pointer;
         }
         .content {
@@ -24,13 +24,35 @@
 <%--    js script--%>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-        $(document).ready(function() {
-            $('.table-row').on("click", function() {
-                var baseUrl = "http://localhost:9090/bm470/blog/";
-                var id = $(this).data("href");
-                window.location = baseUrl + id;
-            });
-        });
+        function paging(pageNumber, maxResult) {
+            var baseUrl = "/bm470/page"
+            var q1 = "pageNumber=" + pageNumber
+            var q2 = "maxResult=" + maxResult
+            var newUrl = baseUrl + "?" + q1 + "&" + q2
+            $(".container").fadeOut(250, function () {
+                window.location = newUrl
+            })
+        }
+        $(document).ready(function () {
+            $(".card-click").click(function () {
+                var baseUrl = "/bm470/blog/"
+                var id = $(this).data("href")
+                alert("card click: " + id)
+                window.location = baseUrl + id
+            })
+        })
+        $(document).ready(function () {
+            $(".paging-click").click(function () {
+                if (${pageNumber}!=$(this).data("href")) {
+                    paging($(this).data("href"), $(".paging-change").val())
+                }
+            })
+        })
+        $(document).ready(function () {
+            $(".paging-change").change(function () {
+                paging(${pageNumber}, $(".paging-change").val())
+            })
+        })
     </script>
 
 </head>
@@ -39,32 +61,34 @@
 
 <div class="container content" style="background-color: azure; width: 70%; height: max-content">
 
-    <div class="row mb-3">
+    <div class="row">
 
-        <div class="col">
+        <div class="col-md-2">
             <label for="page-size-select" class="form-label">Sayfa Boyutu:</label>
-            <select id="page-size-select" class="form-select">
-                <option value="5">5</option>
-                <option value="10">10</option>
-                <option value="20">20</option>
+        </div>
+        <div class="col-md-2">
+            <select id="page-size-select" class="form-select paging-change">
+                <c:forTokens  var="i" items="5,10,20" delims=",">
+                    <option value="${i}" <c:if test='${maxResult==i}'>selected</c:if>>${i}</option>
+                </c:forTokens>
             </select>
         </div>
 
-        <div>
+        <div class="col align-self-end">
             <nav aria-label="Page navigation example">
                 <ul class="pagination justify-content-end">
-                    <li class="page-item disabled">
-                        <a class="page-link" href="#" aria-label="Previous">
+                    <li class="page-item <c:choose><c:when test='${pageNumber==0}'>disabled</c:when><c:otherwise>paging-click</c:otherwise></c:choose>" data-href="${pageNumber-1}">
+                        <p class="page-link" aria-label="Previous">
                             <span aria-hidden="true">&laquo;</span>
-                        </a>
+                        </p>
                     </li>
-                    <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                    <li class="page-item"><a class="page-link" href="#">2</a></li>
-                    <li class="page-item"><a class="page-link" href="#">3</a></li>
-                    <li class="page-item">
-                        <a class="page-link" href="#" aria-label="Next">
+                    <c:forEach var = "i" begin = "0" end = "${pageSize-1}">
+                        <li class="page-item paging-click <c:if test='${pageNumber==i}'>active</c:if>" data-href="${i}"><p class="page-link">${i+1}</p></li>
+                    </c:forEach>
+                    <li class="page-item <c:choose><c:when test='${pageNumber==pageSize-1}'>disabled</c:when><c:otherwise>paging-click</c:otherwise></c:choose>" data-href="${pageNumber+1}">
+                        <p class="page-link" aria-label="Next">
                             <span aria-hidden="true">&raquo;</span>
-                        </a>
+                        </p>
                     </li>
                 </ul>
             </nav>
@@ -72,33 +96,44 @@
 
     </div>
 
+    <c:forEach items="${blogList}" var="blogItem">
+        <div class="card m-2 p-2 card-click" data-href="${blogItem.blogID}">
+            <div class="card-body">
+                <h4 class="card-title">${blogItem.title}</h4>
+                <p class="card-text">${blogItem.content}</p>
+                <div class="row justify-content-end">
+                    <div class="col-md-2" >
+                        <a class="link-secondary link-underline-opacity-25 link-underline-opacity-75-hover" href="/bm470/user/${blogItem.user.userID}">Author: ${blogItem.user.username}</a>
+                    </div>
+                    <div class="col-md-2">
+                        <p class="card-text text-body-secondary">Last Modified: <fmt:formatDate value="${blogItem.lastChangeDate}" pattern="dd/MM/yyyy" /></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </c:forEach>
 
-    <table class="table table-striped table-hover">
-        <thead class="thead-dark">
-            <tr>
-                <th scope="col">#</th>
-                <th scope="col">title</th>
-                <th scope="col">content</th>
-                <th scope="col">isActive</th>
-                <th scope="col">date1</th>
-                <th scope="col">date2</th>
-                <th scope="col">username</th>
-            </tr>
-        </thead>
-        <tbody>
-        <c:forEach items="${blogList}" var="blogItem" >
-            <tr class="table-row" data-href="${blogItem.blogID}">
-                <th scope="row">${blogItem.blogID}</th>
-                <td>${blogItem.title}</td>
-                <td>${blogItem.content}</td>
-                <td>${blogItem.isActive}</td>
-                <td><fmt:formatDate value="${blogItem.creationDate}" pattern="dd/MM/yyyy" /> </td>
-                <td><fmt:formatDate value="${blogItem.lastChangeDate}" pattern="dd/MM/yyyy" /> </td>
-                <td>${blogItem.user.username}</td>
-            </tr>
-        </c:forEach>
-        </tbody>
-    </table>
+    <div class="row">
+        <div class="col align-self-end">
+            <nav aria-label="Page navigation example">
+                <ul class="pagination justify-content-end">
+                    <li class="page-item <c:choose><c:when test='${pageNumber==0}'>disabled</c:when><c:otherwise>paging-click</c:otherwise></c:choose>" data-href="${pageNumber-1}">
+                        <p class="page-link" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </p>
+                    </li>
+                    <c:forEach var = "i" begin = "0" end = "${pageSize-1}">
+                        <li class="page-item paging-click <c:if test='${pageNumber==i}'>active</c:if>" data-href="${i}"><p class="page-link">${i+1}</p></li>
+                    </c:forEach>
+                    <li class="page-item <c:choose><c:when test='${pageNumber==pageSize-1}'>disabled</c:when><c:otherwise>paging-click</c:otherwise></c:choose>" data-href="${pageNumber+1}">
+                        <p class="page-link" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </p>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
 
 </div>
 
