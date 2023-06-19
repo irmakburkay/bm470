@@ -67,56 +67,84 @@ public class UserDAO {
         Query<User> dbQuery = currentSession.createQuery(criteriaQuery);
         List<User> userList = dbQuery.getResultList();
 
+        currentSession.close();
         return userList;
     }
 
-    public User checkUserExists(User user){
-        Session session = getCurrentSession();
-        CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+    public User getUserById(Long id){
+        Session currentSession = getCurrentSession();
+        CriteriaBuilder criteriaBuilder = currentSession.getCriteriaBuilder();
         CriteriaQuery<User> criteriaQuery = criteriaBuilder.createQuery(User.class);
         Root<User> root = criteriaQuery.from(User.class);
-        Predicate predicateUsername = criteriaBuilder.equal(root.get("username"), user.getUsername());
-        Predicate predicatePassword = criteriaBuilder.equal(root.get("password"), user.getPassword());
-        criteriaQuery.select(root).where(criteriaBuilder.and(predicateUsername, predicatePassword));
-        Query<User> query = session.createQuery(criteriaQuery);
+        Predicate predicateUsername = criteriaBuilder.equal(root.get("userID"), id);
+        criteriaQuery.select(root).where(predicateUsername);
+        Query<User> query = currentSession.createQuery(criteriaQuery);
         try{
             return query.getSingleResult();
         }catch (Exception e){
             return null;
         }
+        finally {
+            currentSession.close();
+        }
+    }
+
+    public User checkUserExists(User user){
+        Session currentSession = getCurrentSession();
+        CriteriaBuilder criteriaBuilder = currentSession.getCriteriaBuilder();
+        CriteriaQuery<User> criteriaQuery = criteriaBuilder.createQuery(User.class);
+        Root<User> root = criteriaQuery.from(User.class);
+        Predicate predicateUsername = criteriaBuilder.equal(root.get("username"), user.getUsername());
+        Predicate predicatePassword = criteriaBuilder.equal(root.get("password"), user.getPassword());
+        criteriaQuery.select(root).where(criteriaBuilder.and(predicateUsername, predicatePassword));
+        Query<User> query = currentSession.createQuery(criteriaQuery);
+        try{
+            return query.getSingleResult();
+        }catch (Exception e){
+            return null;
+        }
+        finally {
+            currentSession.close();
+        }
 
     }
     public boolean checkUsernameExists(String username){
-        Session session = getCurrentSession();
-        CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+        Session currentSession = getCurrentSession();
+        CriteriaBuilder criteriaBuilder = currentSession.getCriteriaBuilder();
         CriteriaQuery<User> criteriaQuery = criteriaBuilder.createQuery(User.class);
         Root<User> root = criteriaQuery.from(User.class);
         Predicate predicateUsername = criteriaBuilder.equal(root.get("username"), username);
 
         criteriaQuery.select(root).where(predicateUsername);
-        Query<User> query = session.createQuery(criteriaQuery);
+        Query<User> query = currentSession.createQuery(criteriaQuery);
         try{
             User returnedUser = query.getSingleResult();
             return true;
         }catch (Exception e){
             return false;
         }
+        finally {
+            currentSession.close();
+        }
     }
 
     public boolean checkEmailExists(String email){
-        Session session = getCurrentSession();
-        CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+        Session currentSession = getCurrentSession();
+        CriteriaBuilder criteriaBuilder = currentSession.getCriteriaBuilder();
         CriteriaQuery<User> criteriaQuery = criteriaBuilder.createQuery(User.class);
         Root<User> root = criteriaQuery.from(User.class);
         Predicate predicateUsername = criteriaBuilder.equal(root.get("email"), email);
 
         criteriaQuery.select(root).where(predicateUsername);
-        Query<User> query = session.createQuery(criteriaQuery);
+        Query<User> query = currentSession.createQuery(criteriaQuery);
         try{
             User returnedUser = query.getSingleResult();
             return true;
         }catch (Exception e){
             return false;
+        }
+        finally {
+            currentSession.close();
         }
     }
 }
