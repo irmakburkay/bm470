@@ -41,4 +41,8 @@ public class BlogService {
         return blogSize;
     }
 
+    public List<Blog> getBlogsByUserId(Long id){
+        return blogDAO.getBlogsByUserId(id);
+    }
+
 }
