@@ -21,6 +21,11 @@ public class BlogService {
         blogDAO.saveOrUpdateObject(blog);
     }
 
+    @Transactional(readOnly = false)
+    public void updateBlog(Blog blog) {
+        blogDAO.updateObject(blog);
+    }
+
     public List<Blog> loadBlogs() {
         List<Blog> blogList = blogDAO.getAllBlogs();
         return blogList;

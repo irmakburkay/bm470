@@ -14,6 +14,7 @@
 <body>
 <div align="center">
   <form:form method="post" action="/bm470/blog/saveblog" modelAttribute="blog">
+    <form:hidden path="blogID" id="blogID"/>
     <table border="0">
       <tr>
         <td colspan="2" align="center"><h2>Yeni Blog Yazısı</h2></td>

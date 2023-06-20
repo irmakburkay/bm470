@@ -9,6 +9,7 @@ import tr.edu.duzce.mf.bm.bm470.model.Blog;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.io.Serializable;
 import java.util.List;
@@ -48,6 +49,23 @@ public class BlogDAO {
         }
         return success;
     }
+
+    public boolean updateObject(Object object) {
+        boolean success = true;
+        Session session = getCurrentSession();
+        try {
+            session.beginTransaction();
+            session.update(object);
+            session.getTransaction().commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+            success = false;
+        } finally {
+            session.close();
+        }
+        return success;
+    }
+
     public boolean removeObject(Object object) {
         boolean success = true;
         try {
@@ -81,7 +99,9 @@ public class BlogDAO {
         CriteriaQuery<Blog> criteriaQuery = criteriaBuilder.createQuery(Blog.class);
         Root<Blog> root = criteriaQuery.from(Blog.class);
 
-        criteriaQuery.select(root);
+        Predicate predicate = criteriaBuilder.equal(root.get("isActive"), 1);
+
+        criteriaQuery.select(root).where(predicate);
 
         Query<Blog> dbQuery = currentSession.createQuery(criteriaQuery);
         dbQuery.setFirstResult(pageNumber * maxResult);

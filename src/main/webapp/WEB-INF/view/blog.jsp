@@ -31,22 +31,20 @@
 <jsp:include page="header.jsp"/>
 
 <div class="container content">
-    <c:forEach items="${blogList}" var="blogItem">
         <div class="card m-2 p-2">
             <div class="card-body">
-                <h4 class="card-title">${blogItem.title}</h4>
-                <p class="card-text">${blogItem.content}</p>
+                <h4 class="card-title">${blog.title}</h4>
+                <p class="card-text">${blog.content}</p>
                 <div class="row justify-content-end">
                     <div class="col-md-2" >
-                        <a class="link-secondary link-underline-opacity-25 link-underline-opacity-75-hover" href="#">Author: ${blogItem.user.username}</a>
+                        <a class="link-secondary link-underline-opacity-25 link-underline-opacity-75-hover" href="#">Author: ${blog.user.username}</a>
                     </div>
                     <div class="col-md-2">
-                        <p class="card-text text-body-secondary">Last Modified: <fmt:formatDate value="${blogItem.lastChangeDate}" pattern="dd/MM/yyyy" /></p>
+                        <p class="card-text text-body-secondary">Last Modified: <fmt:formatDate value="${blog.lastChangeDate}" pattern="dd/MM/yyyy" /></p>
                     </div>
                 </div>
             </div>
         </div>
-    </c:forEach>
 </div>
 
 <jsp:include page="footer.jsp"/>
