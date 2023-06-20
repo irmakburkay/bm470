@@ -206,29 +206,6 @@
                         </p>
                     </li>
 
-                    <c:choose>
-                        <c:when test="${pageSize <= 5}">
-                            <c:set var="begin" value="0"/>
-                            <c:set var="end" value="${pageSize-1}"/>
-                        </c:when>
-                        <c:otherwise>
-                            <c:choose>
-                                <c:when test="${pageNumber < 3}">
-                                    <c:set var="begin" value="0"/>
-                                    <c:set var="end" value="4"/>
-                                </c:when>
-                                <c:when test="${pageNumber >= pageSize - 3}">
-                                    <c:set var="begin" value="${pageSize - 5}"/>
-                                    <c:set var="end" value="${pageSize - 1}"/>
-                                </c:when>
-                                <c:otherwise>
-                                    <c:set var="begin" value="${pageNumber - 2}"/>
-                                    <c:set var="end" value="${pageNumber + 2}"/>
-                                </c:otherwise>
-                            </c:choose>
-                        </c:otherwise>
-                    </c:choose>
-
                     <c:forEach var = "i" begin = "${begin}" end = "${end}">
                         <li class="page-item paging-click
                             <c:if test='${pageNumber==i}'>active</c:if>"
