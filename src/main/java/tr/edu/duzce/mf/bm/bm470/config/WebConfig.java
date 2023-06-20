@@ -3,7 +3,6 @@ package tr.edu.duzce.mf.bm.bm470.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.StringHttpMessageConverter;
@@ -15,7 +14,6 @@ import org.springframework.web.servlet.resource.PathResourceResolver;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
 import tr.edu.duzce.mf.bm.bm470.interceptor.AuthInterceptor;
-import tr.edu.duzce.mf.bm.bm470.interceptor.RequestInterceptor;
 
 import java.nio.charset.Charset;
 import java.util.ArrayList;
@@ -39,7 +37,7 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/resources/**")
-                .addResourceLocations("/resources/images/")
+                .addResourceLocations("/resources/")
                 .setCachePeriod(3600)
                 .resourceChain(true)
                 .addResolver(new PathResourceResolver());
@@ -67,7 +65,6 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new RequestInterceptor()).addPathPatterns("/*");
         List<String> paths = new ArrayList<>();
         paths.add("/user/profile");
         registry.addInterceptor((new AuthInterceptor())).addPathPatterns(paths);

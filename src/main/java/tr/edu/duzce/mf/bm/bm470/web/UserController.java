@@ -6,8 +6,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import tr.edu.duzce.mf.bm.bm470.model.Blog;
 import tr.edu.duzce.mf.bm.bm470.model.User;
+import tr.edu.duzce.mf.bm.bm470.service.BlogService;
 import tr.edu.duzce.mf.bm.bm470.service.UserService;
+import tr.edu.duzce.mf.bm.bm470.util.UserValidation;
 
 import java.util.List;
 
@@ -17,31 +20,34 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private BlogService blogService;
 
-    @GetMapping("/")
-    public String getAllBlogs(Model model) {
-        User us1 = new User();
-        us1.setUsername("sadfasdf");
-        us1.setPassword("asdfa");
-        us1.setEmail("asdf");
-        userService.addUser(us1);
-        List<User> userList = userService.loadUsers();
-        model.addAttribute("userList", userList);
-
-        String partialView = "";
-        for (User user : userList) {
-            partialView += "<tr>";
-            partialView += "<td>" + user.getUserID() + "</td>";
-            partialView += "<td>" + user.getUsername() + "</td>";
-            partialView += "<td>" + user.getPassword() + "</td>";
-            partialView += "<td>" + user.getEmail() + "</td>";
-            partialView += "<td>" + user.getIsActive() + "</td>";
-            partialView += "</tr>";
-        }
-        model.addAttribute("partialView", partialView);
-
-        return "user";
-    }
+//    // TODO burası gözükmemeli
+//    @GetMapping("/")
+//    public String getAllBlogs(Model model) {
+//        User us1 = new User();
+//        us1.setUsername("sadfasdf");
+//        us1.setPassword("asdfa");
+//        us1.setEmail("asdf");
+//        userService.addUser(us1);
+//        List<User> userList = userService.loadUsers();
+//        model.addAttribute("userList", userList);
+//
+//        String partialView = "";
+//        for (User user : userList) {
+//            partialView += "<tr>";
+//            partialView += "<td>" + user.getUserID() + "</td>";
+//            partialView += "<td>" + user.getUsername() + "</td>";
+//            partialView += "<td>" + user.getPassword() + "</td>";
+//            partialView += "<td>" + user.getEmail() + "</td>";
+//            partialView += "<td>" + user.getIsActive() + "</td>";
+//            partialView += "</tr>";
+//        }
+//        model.addAttribute("partialView", partialView);
+//
+//        return "user";
+//    }
 
     @ModelAttribute("user")
     public User setUser(){
@@ -53,89 +59,76 @@ public class UserController {
         return "register";
     }
 
-//    @RequestMapping("/saveuser")
-//    public ModelAndView seveuser(){
-//
-//    }
-
-//    @RequestMapping(value = "/saveuser", method = RequestMethod.POST)
-    public String saveUser(@ModelAttribute("user") User user, HttpSession session){
-        session.removeAttribute("usernameAvailability");
-        session.removeAttribute("emailAvailability");
-        session.removeAttribute("message");
-
-        boolean doesUsernameExist = userService.checkUsernameExists(user.getUsername());
-        boolean doesEmailExist = userService.checkEmailExists(user.getEmail());
-
-        if(doesUsernameExist){
-            session.setAttribute("usernameAvailability", "Kullanıcı adı alınmış!");
-        }
-
-        if(doesEmailExist){
-            session.setAttribute("emailAvailability", "Email kullanımda!");
-        }
-
-        if(!doesUsernameExist && !doesEmailExist){
-            if(user.getUsername() != null && user.getPassword() != null && user.getEmail() != null
-                    && !user.getUsername().trim().isEmpty()
-                    && !user.getPassword().trim().isEmpty()
-                    && !user.getEmail().trim().isEmpty()
-            ) {
-                userService.addUser(user);
-            }
-            else {
-                session.setAttribute("message", "Sorun var!");
-            }
-        }
-        return "redirect:/";
-    }
-
     @PostMapping("/saveuser")
     public ModelAndView saveUser(@ModelAttribute("user") User user, Model model){
-        boolean doesUsernameExist = userService.checkUsernameExists(user.getUsername());
-        boolean doesEmailExist = userService.checkEmailExists(user.getEmail());
+        boolean isUsernameValid = UserValidation.isUsernameValid(user.getUsername());
+        boolean isPasswordValid = UserValidation.isPasswordValid(user.getPassword());
+        boolean isEmailValid = UserValidation.isEmailValid(user.getEmail());
+        boolean doesPasswordsMatch = UserValidation.doesPasswordsMatch(user.getPassword(), user.getPasswordRe());
 
-        if(doesUsernameExist || doesEmailExist){
-            if(doesUsernameExist){
-                model.addAttribute("usernameAvailability", "Kullanıcı adı daha önce alınmış!");
+        if(!isUsernameValid || !isPasswordValid || !isEmailValid || !doesPasswordsMatch){
+            if(!isUsernameValid){
+                model.addAttribute("usernameValidity", "Kullanıcı adı 3-40 karakter arası olmalıdır.");
             }
-            if(doesEmailExist){
-                model.addAttribute("emailAvailability", "E-mail kullanımda!");
+            if(!isPasswordValid){
+                model.addAttribute("passwordValidity", "Şifre minimum 8 karakter olmalıdır.");
             }
-            return new ModelAndView("register");
+            if(!isEmailValid){
+                model.addAttribute("emailValidity", "Lütfen geçerli bir e-mail giriniz.");
+            }
+            if(!doesPasswordsMatch){
+                model.addAttribute("passwordMatch", "Şifreler eşleşmemektedir.");
+            }
         }
-        userService.addUser(user);
-        model.addAttribute("message", "OK");
+        else{
+            boolean doesUsernameExist = userService.checkUsernameExists(user.getUsername());
+            boolean doesEmailExist = userService.checkEmailExists(user.getEmail());
+
+            if(doesUsernameExist || doesEmailExist){
+                if(doesUsernameExist){
+                    model.addAttribute("usernameAvailability", "Kullanıcı adı daha önce alınmış!");
+                }
+                if(doesEmailExist){
+                    model.addAttribute("emailAvailability", "E-mail kullanımda!");
+                }
+            }
+            userService.addUser(user);
+            model.addAttribute("message", "OK");
+        }
         return new ModelAndView("register");
     }
 
-//    @GetMapping("/{blogId}")
-//    public ModelAndView getBlogById(@PathVariable("blogId") Long id, Model model) {
-//
-//        Blog blog = blogService.loadBlogById(id);
-//
-//        if (blog == null)
-//            return new ModelAndView("redirect:http://localhost:9090/bm470/");
-//
-//        List<Blog> blogList = new ArrayList<>();
-//        blogList.add(blog);
-//        model.addAttribute("blogList", blogList);
-//
-//        String partialView = "";
-//        for (Blog blogItem : blogList) {
-//            partialView += "<tr>";
-//            partialView += "<td>" + blogItem.getBlogID() + " ne saçma şey </td>";
-//            partialView += "<td>" + blogItem.getTitle() + "</td>";
-//            partialView += "<td>" + blogItem.getContent() + "</td>";
-//            partialView += "<td>" + blogItem.getIsActive() + "</td>";
-//            partialView += "<td>" + convertTime(blogItem.getCreationDate()) + "</td>";
-//            partialView += "<td>" + convertTime(blogItem.getLastChangeDate()) + "</td>";
-//            partialView += "</tr>";
-//        }
-//        model.addAttribute("partialView", partialView);
-//
-//        return new ModelAndView("blog");
-//    }
+    @GetMapping("/{userId}")
+    public ModelAndView getBlogById(@PathVariable("userId") String StringId, Model model) {
+        User user = null;
+        Long id;
+
+        try{
+            id = Long.parseLong(StringId);
+            user = userService.getUserById(id);
+        }catch (Exception e){
+            return new ModelAndView("redirect:/");
+        }
+
+        List<Blog> blogList;
+
+        if(user != null){
+            blogList = blogService.getBlogsByUserId(id);
+            model.addAttribute("user", user);
+
+            if(blogList.size() == 0){
+                model.addAttribute("lurker", "Bu kullanıcı henüz paylaşımda bulunmamış.");
+            }
+            else{
+                model.addAttribute("blogList", blogList);
+            }
+            return new ModelAndView("user");
+        }
+        else {
+            model.addAttribute("message", "Kullanıcı bulunamadı!");
+            return new ModelAndView("error");
+        }
+    }
 
     @RequestMapping("/login")
     public String login(){
@@ -159,6 +152,13 @@ public class UserController {
     public String logout(HttpSession session){
         if(session.getAttribute("loginUser") != null){
             session.removeAttribute("loginUser");
+
+            // button textleri için
+            session.setAttribute("login_logout_text", "Giriş Yap");
+            session.setAttribute("register_profile_text", "Kaydol");
+            // linkler için
+            session.setAttribute("login_logout_link", "login");
+            session.setAttribute("register_profile_link", "register");
         }
         return "redirect:/";
     }

@@ -9,6 +9,7 @@ import tr.edu.duzce.mf.bm.bm470.model.Blog;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.io.Serializable;
 import java.util.List;
@@ -108,6 +109,20 @@ public class BlogDAO {
         currentSession.close();
 
         return totalCount;
+    }
+
+    public List<Blog> getBlogsByUserId(Long id){
+        Session session = getCurrentSession();
+        CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+        CriteriaQuery<Blog> criteriaQuery = criteriaBuilder.createQuery(Blog.class);
+        Root<Blog> root = criteriaQuery.from(Blog.class);
+        Predicate predicateAdi = criteriaBuilder.equal(root.get("user"), id);
+
+        criteriaQuery.select(root).where(predicateAdi);
+
+        Query<Blog> query = session.createQuery(criteriaQuery);
+        List<Blog> blogList = query.getResultList();
+        return blogList;
     }
 
 }

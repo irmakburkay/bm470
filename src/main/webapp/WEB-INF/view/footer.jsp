@@ -6,11 +6,6 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<style>
-    .footer {
-        flex-grow: 1;
-    }
-</style>
 <footer class="bg-dark footer">
   <div class="container text-light text-center">
     <p class="display-5 mb-3">Blog Sitesi</p>

@@ -29,44 +29,44 @@ public class MainController {
     private UserService userService;
 
     @GetMapping(value = "/")
-    public String index(Model model, HttpSession session) {
+    public String index(HttpSession session) {
         if(session.getAttribute("loginUser") == null){
             // button textleri için
-            model.addAttribute("login_logout_text", "Giriş Yap");
-            model.addAttribute("register_profile_text", "Kaydol");
+            session.setAttribute("login_logout_text", "Giriş Yap");
+            session.setAttribute("register_profile_text", "Kaydol");
             // linkler için
-            model.addAttribute("login_logout_link", "login");
-            model.addAttribute("register_profile_link", "register");
+            session.setAttribute("login_logout_link", "login");
+            session.setAttribute("register_profile_link", "register");
         }
         else{
             // button textleri için
-            model.addAttribute("login_logout_text", "Çıkış_Yap");
-            model.addAttribute("register_profile_text", "Profil");
+            session.setAttribute("login_logout_text", "Çıkış Yap");
+            session.setAttribute("register_profile_text", "Profil");
             // linkler için
-            model.addAttribute("login_logout_link", "logout");
-            model.addAttribute("register_profile_link", "profile");
+            session.setAttribute("login_logout_link", "logout");
+            session.setAttribute("register_profile_link", "profile");
         }
 
-//        Random r = new Random();
-//        String alphabet = "abcdefghijklmnopqrstuvwxyz";
-//        String number = "0123456789";
-//        StringBuilder username = new StringBuilder();
-//        StringBuilder password = new StringBuilder();
-//        for (int i = 0; i < 6; i++)
-//            username.append(alphabet.charAt(r.nextInt(alphabet.length())));
-//        for (int i = 0; i < 4; i++)
-//            password.append(number.charAt(r.nextInt(number.length())));
+        Random r = new Random();
+        String alphabet = "abcdefghijklmnopqrstuvwxyz";
+        String number = "0123456789";
+        StringBuilder username = new StringBuilder();
+        StringBuilder password = new StringBuilder();
+        for (int i = 0; i < 6; i++)
+            username.append(alphabet.charAt(r.nextInt(alphabet.length())));
+        for (int i = 0; i < 4; i++)
+            password.append(number.charAt(r.nextInt(number.length())));
 
-//        User user = new User();
-//        user.setEmail(username + "@gmail.com");
-//        user.setUsername(username.toString());
-//        user.setPassword(password.toString());
-//        userService.addUser(user);
-//        Blog blog = new Blog();
-//        blog.setTitle("blog_title");
-//        blog.setContent("blog_content");
-//        blog.setUser(user);
-//        blogService.addBlog(blog);
+        User user = new User();
+        user.setEmail(username + "@gmail.com");
+        user.setUsername(username.toString());
+        user.setPassword(password.toString());
+        userService.addUser(user);
+        Blog blog = new Blog();
+        blog.setTitle("blog_title");
+        blog.setContent("blog_content");
+        blog.setUser(user);
+        blogService.addBlog(blog);
 
         return "forward:/page?pageNumber=0&maxResult=5";
     }

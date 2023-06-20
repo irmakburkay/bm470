@@ -11,12 +11,9 @@
 <html>
 <head>
     <title>Kaydol</title>
-<%--    <script--%>
-<%--            src="https://code.jquery.com/jquery-3.7.0.min.js"--%>
-<%--            integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g="--%>
-<%--            crossorigin="anonymous"></script>--%>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+    <link href="${pageContext.request.contextPath}/resources/styles/style.css" rel="stylesheet">
 </head>
 <body>
 <div align="center">
@@ -29,16 +26,42 @@
             <tr>
                 <td>Kullanıcı Adı:</td>
                 <td><form:input path="username" id="username"/></td>
-                <td><small>${usernameAvailability}</small></td>
+                <td>
+                    <small class="error">${usernameAvailability}</small>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" align="center">
+                    <small class="error">${usernameValidity}</small>
+                </td>
             </tr>
             <tr>
                 <td>Şifre:</td>
                 <td><form:password path="password" id="password"/></td>
             </tr>
             <tr>
+                <td colspan="2" align="center">
+                    <small class="error">${passwordValidity}</small>
+                </td>
+            </tr>
+            <tr>
+                <td>Şifre:</td>
+                <td><form:password path="passwordRe" id="passwordRe"/></td>
+            </tr>
+            <tr>
+                <td colspan="2" align="center">
+                    <small class="error">${passwordMatch}</small>
+                </td>
+            </tr>
+            <tr>
                 <td>E-mail:</td>
                 <td><form:input path="email" id="email"/></td>
-                <td><small>${emailAvailability}</small></td>
+                <td ><small class="error">${emailAvailability}</small></td>
+            </tr>
+            <tr>
+                <td colspan="2" align="center">
+                    <small class="error">${emailValidity}</small>
+                </td>
             </tr>
             <tr>
                 <td colspan="2" align="center"><input type="submit" id="register_button" value="Kaydet" />

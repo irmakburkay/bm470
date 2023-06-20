@@ -17,6 +17,8 @@ public class WebAppInitializer implements WebApplicationInitializer {
                 servletContext.addServlet("DispatcherServlet",new DispatcherServlet(context));
         dispatcherServlet.setLoadOnStartup(1);
         dispatcherServlet.addMapping("/");
+        // Custom Error Handling
+        dispatcherServlet.setInitParameter("throwExceptionIfNoHandlerFound", "true");
 
         CharacterEncodingFilter characterEncodingFilter = new CharacterEncodingFilter();
         characterEncodingFilter.setEncoding("UTF-8");
