@@ -1,0 +1,17 @@
+.content {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-color: azure;
+    width: 70%;
+    height: max-content
+}
+.card-click{
+    cursor:pointer;
+}
+.error{
+    color: red;
+}
+.footer {
+    flex-grow: 1;
+}

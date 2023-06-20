@@ -7,36 +7,49 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
-
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <html>
 <head>
-    <meta charset="UTF-8">
-    <title>User Listele</title>
+    <title>${user.username} Blogları</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link href="${pageContext.request.contextPath}/resources/styles/style.css" rel="stylesheet">
+
+    <script>
+        $(document).ready(function () {
+            $(".card-click").click(function () {
+                var baseUrl = "/bm470/blog/"
+                var id = $(this).data("href")
+                alert("card click: " + id)
+                window.location = baseUrl + id
+            })
+        })
+    </script>
 </head>
 <body>
-<h1>User Listesi</h1>
-<table>
+    <jsp:include page="header.jsp"/>
 
-    <tr>
-        <th>ID</th>
-        <th>Kullanıcı Adı</th>
-        <th>Şifre</th>
-        <th>E-Mail</th>
-        <th>Aktif Mi?</th>
-    </tr>
+    <div class="container content">
+        <h1>Ev Sahibi: ${user.username}</h1>
 
-    ${partialView}
+        ${lurker}
 
-    <c:forEach items="${userList}" var="userItem" >
-        <tr>
-            <td>${userItem.userID}</td>
-            <td>${userItem.username}</td>
-            <td>${userItem.password}</td>
-            <td>${userItem.email}</td>
-            <td>${userItem.isActive}</td>
-        </tr>
-    </c:forEach>
+        <c:forEach items="${blogList}" var="blogItem">
+            <div class="card m-2 p-2 card-click" data-href="${blogItem.blogID}">
+                <div class="card-body">
+                    <h4 class="card-title">${blogItem.title}</h4>
+                    <p class="card-text">${blogItem.content}</p>
+                    <div class="row justify-content-end">
+                        <div class="col-md-2">
+                            <p class="card-text text-body-secondary">Last Modified: <fmt:formatDate value="${blogItem.lastChangeDate}" pattern="dd/MM/yyyy" /></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </c:forEach>
+    </div>
 
-</table>
+    <jsp:include page="footer.jsp"/>
 </body>
 </html>

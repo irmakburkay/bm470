@@ -22,6 +22,8 @@ public class User implements Serializable {
     private String username;
     @Column(name = "password", nullable = false)
     private String password;
+    @Transient
+    private String passwordRe;
     @Column(name = "email", nullable = false)
     private String email;
 
@@ -78,5 +80,13 @@ public class User implements Serializable {
 
     public void setIsActive(boolean isActive) {
         this.isActive = isActive;
+    }
+
+    public String getPasswordRe() {
+        return passwordRe;
+    }
+
+    public void setPasswordRe(String passwordRe) {
+        this.passwordRe = passwordRe;
     }
 }
