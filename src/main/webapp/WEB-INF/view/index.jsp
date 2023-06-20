@@ -45,9 +45,9 @@
                 event.stopPropagation()
                 var blogID = $(this).data("href")
                 if (confirm("Blogu silmek istediğinize emin misiniz?") == true) {
-                    $.post("http://localhost:9090/bm470/blog/delete", {"blogID": blogID}, function (data, status) {
+                    $.post("/bm470/blog/delete", {"blogID": blogID}, function (data, status) {
                         alert("Status: " + status);
-                        window.location = data
+                        window.location = ""
                     })
                 }
             })
@@ -80,19 +80,49 @@
                             <c:when test='${pageNumber==0}'>disabled</c:when>
                             <c:otherwise>paging-click</c:otherwise>
                         </c:choose>"
-                        data-href="${pageNumber-1}">
+                        data-href="0">
                         <p class="page-link" aria-label="Previous">
                             <span aria-hidden="true">&laquo;</span>
                         </p>
                     </li>
-                    <c:forEach var = "i" begin = "0" end = "${pageSize-1}">
+
+                    <c:choose>
+                        <c:when test="${pageSize <= 5}">
+                            <c:set var="begin" value="0"/>
+                            <c:set var="end" value="${pageSize-1}"/>
+                        </c:when>
+                        <c:otherwise>
+                            <c:choose>
+                                <c:when test="${pageNumber < 3}">
+                                    <c:set var="begin" value="0"/>
+                                    <c:set var="end" value="4"/>
+                                </c:when>
+                                <c:when test="${pageNumber >= pageSize - 3}">
+                                    <c:set var="begin" value="${pageSize - 5}"/>
+                                    <c:set var="end" value="${pageSize - 1}"/>
+                                </c:when>
+                                <c:otherwise>
+                                    <c:set var="begin" value="${pageNumber - 2}"/>
+                                    <c:set var="end" value="${pageNumber + 2}"/>
+                                </c:otherwise>
+                            </c:choose>
+                        </c:otherwise>
+                    </c:choose>
+
+                    <c:forEach var = "i" begin = "${begin}" end = "${end}">
                         <li class="page-item paging-click
                             <c:if test='${pageNumber==i}'>active</c:if>"
                             data-href="${i}">
                             <p class="page-link">${i+1}</p>
                         </li>
                     </c:forEach>
-                    <li class="page-item <c:choose><c:when test='${pageNumber==pageSize-1}'>disabled</c:when><c:otherwise>paging-click</c:otherwise></c:choose>" data-href="${pageNumber+1}">
+
+                    <li class="page-item
+                        <c:choose>
+                            <c:when test='${pageNumber==pageSize-1}'>disabled</c:when>
+                            <c:otherwise>paging-click</c:otherwise>
+                        </c:choose>"
+                        data-href="${pageSize-1}">
                         <p class="page-link" aria-label="Next">
                             <span aria-hidden="true">&raquo;</span>
                         </p>
@@ -138,25 +168,23 @@
                             </div>
                         </div>
                     </c:if>
-                    <c:if test='${blogItem.blogID!=2}'>
-                        <div class="col">
-                            <div class="row justify-content-end">
-                                <div class="col-auto" >
-                                    <c:choose>
-                                        <c:when test='${blogItem.user.username=="anonymous"}'>
-                                            <p class="card-text text-body-secondary">Author: ${blogItem.user.username}</p>
-                                        </c:when>
-                                        <c:otherwise>
-                                            <a class="link-secondary link-underline-opacity-25 link-underline-opacity-75-hover" onclick="event.stopPropagation()" href="/bm470/user/${blogItem.user.userID}">Author: ${blogItem.user.username}</a>
-                                        </c:otherwise>
-                                    </c:choose>
-                                </div>
-                                <div class="col-auto">
-                                    <p class="card-text text-body-secondary">Last Modified: <fmt:formatDate value="${blogItem.lastChangeDate}" pattern="dd/MM/yyyy" /></p>
-                                </div>
+                    <div class="col">
+                        <div class="row justify-content-end">
+                            <div class="col-auto" >
+                                <c:choose>
+                                    <c:when test='${blogItem.user.isActive==false}'>
+                                        <p class="card-text text-body-secondary">Author: anonymous</p>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <a class="link-secondary link-underline-opacity-25 link-underline-opacity-75-hover" onclick="event.stopPropagation()" href="/bm470/user/${blogItem.user.userID}">Author: ${blogItem.user.username}</a>
+                                    </c:otherwise>
+                                </c:choose>
+                            </div>
+                            <div class="col-auto">
+                                <p class="card-text text-body-secondary">Last Modified: <fmt:formatDate value="${blogItem.lastChangeDate}" pattern="dd/MM/yyyy" /></p>
                             </div>
                         </div>
-                    </c:if>
+                    </div>
                 </div>
 
             </div>

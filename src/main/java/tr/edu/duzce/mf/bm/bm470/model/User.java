@@ -3,6 +3,7 @@ package tr.edu.duzce.mf.bm.bm470.model;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Objects;
 
 
 @Entity
@@ -88,5 +89,18 @@ public class User implements Serializable {
 
     public void setPasswordRe(String passwordRe) {
         this.passwordRe = passwordRe;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return Objects.equals(userID, user.userID);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(userID);
     }
 }
