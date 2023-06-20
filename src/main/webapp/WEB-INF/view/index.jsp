@@ -200,20 +200,26 @@
                             <c:when test='${pageNumber==0}'>disabled</c:when>
                             <c:otherwise>paging-click</c:otherwise>
                         </c:choose>"
-                        data-href="${pageNumber-1}">
+                        data-href="0">
                         <p class="page-link" aria-label="Previous">
                             <span aria-hidden="true">&laquo;</span>
                         </p>
                     </li>
-                    <c:forEach var = "i" begin = "0" end = "${pageSize-1}">
-                        <li class="page-item paging-click <c:if test='${pageNumber==i}'>active</c:if>" data-href="${i}"><p class="page-link">${i+1}</p></li>
+
+                    <c:forEach var = "i" begin = "${begin}" end = "${end}">
+                        <li class="page-item paging-click
+                            <c:if test='${pageNumber==i}'>active</c:if>"
+                            data-href="${i}">
+                            <p class="page-link">${i+1}</p>
+                        </li>
                     </c:forEach>
+
                     <li class="page-item
                         <c:choose>
                             <c:when test='${pageNumber==pageSize-1}'>disabled</c:when>
                             <c:otherwise>paging-click</c:otherwise>
                         </c:choose>"
-                        data-href="${pageNumber+1}">
+                        data-href="${pageSize-1}">
                         <p class="page-link" aria-label="Next">
                             <span aria-hidden="true">&raquo;</span>
                         </p>
