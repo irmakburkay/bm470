@@ -14,9 +14,7 @@ import tr.edu.duzce.mf.bm.bm470.service.UserService;
 
 import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 @Controller
 @RequestMapping(value = "/", method = RequestMethod.GET)
@@ -68,26 +66,42 @@ public class MainController {
         blog.setUser(user);
         blogService.addBlog(blog);
 
-        return "forward:/page?pageNumber=0&maxResult=5";
+        if (session.getAttribute("maxResult") == null)
+            session.setAttribute("maxResult", 5);
+
+
+        return "forward:/page?pageNumber=0&maxResult=" + session.getAttribute("maxResult").toString();
     }
 
     @GetMapping("/page")
-    public String pagination(@RequestParam("pageNumber") int pageNumber, @RequestParam("maxResult") int maxResult, Model model) {
-        List<Blog> blogList;
-        try {
-            blogList = blogService.loadBlogsWithPaging(pageNumber, maxResult);
-            if (blogList.isEmpty()) throw new Exception();
-        } catch (Exception e) {
-            pageNumber = 0;
+    public String pagination(@RequestParam("pageNumber") int pageNumber, @RequestParam("maxResult") int maxResult, Model model, HttpSession session) {
+        boolean flag = true;
+        if (Arrays.asList(5, 10, 20).contains(maxResult)) {
+            if ((int) session.getAttribute("maxResult") != maxResult)
+                session.setAttribute("maxResult", maxResult);
+        } else {
+            flag = false;
             maxResult = 5;
-            blogList = blogService.loadBlogsWithPaging(pageNumber, maxResult);
+            session.setAttribute("maxResult", maxResult);
         }
-        model.addAttribute("blogList", blogList);
+
         Long blogSize = blogService.getBlogCount();
         int pageSize = (int) Math.ceil(blogSize / (double) maxResult);
+
+        if (pageNumber < 0 || pageNumber > pageSize - 1) {
+            flag = false;
+            pageNumber = 0;
+        }
+
+        if (!flag)
+            return "redirect:/page?pageNumber=" + pageNumber + "&maxResult=" + maxResult;
+
+        List<Blog> blogList = blogService.loadBlogsWithPaging(pageNumber, maxResult);
+//        session.setAttribute("loginUser", blogList.get(1).getUser());
+
+        model.addAttribute("blogList", blogList);
         model.addAttribute("pageSize", pageSize);
         model.addAttribute("pageNumber", pageNumber);
-        model.addAttribute("maxResult", maxResult);
         return "index";
     }
 
