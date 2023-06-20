@@ -45,26 +45,27 @@ public class MainController {
             session.setAttribute("register_profile_link", "profile");
         }
 
-//        Random r = new Random();
-//        String alphabet = "abcdefghijklmnopqrstuvwxyz";
-//        String number = "0123456789";
-//        StringBuilder username = new StringBuilder();
-//        StringBuilder password = new StringBuilder();
-//        for (int i = 0; i < 6; i++)
-//            username.append(alphabet.charAt(r.nextInt(alphabet.length())));
-//        for (int i = 0; i < 4; i++)
-//            password.append(number.charAt(r.nextInt(number.length())));
+        Random r = new Random();
+        String alphabet = "abcdefghijklmnopqrstuvwxyz";
+        String number = "0123456789";
+        StringBuilder username = new StringBuilder();
+        StringBuilder password = new StringBuilder();
+        for (int i = 0; i < 6; i++)
+            username.append(alphabet.charAt(r.nextInt(alphabet.length())));
+        for (int i = 0; i < 4; i++)
+            password.append(number.charAt(r.nextInt(number.length())));
 
-//        User user = new User();
-//        user.setEmail(username + "@gmail.com");
-//        user.setUsername(username.toString());
-//        user.setPassword(password.toString());
-//        userService.addUser(user);
-//        Blog blog = new Blog();
-//        blog.setTitle("blog_title");
-//        blog.setContent("blog_content");
-//        blog.setUser(user);
-//        blogService.addBlog(blog);
+        User user = new User();
+        user.setEmail(username + "@gmail.com");
+        user.setUsername(username.toString());
+        user.setPassword(password.toString());
+        userService.addUser(user);
+        Blog blog = new Blog();
+        blog.setTitle("blog_title");
+        blog.setContent("blog_content");
+        blog.setUser(user);
+        blogService.addBlog(blog);
+
         if (session.getAttribute("maxResult") == null)
             session.setAttribute("maxResult", 5);
 

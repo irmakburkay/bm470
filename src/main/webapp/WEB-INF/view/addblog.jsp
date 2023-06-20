@@ -10,6 +10,7 @@
 <html>
 <head>
   <title>Title</title>
+  <link href="${pageContext.request.contextPath}/resources/styles/style.css" rel="stylesheet">
 </head>
 <body>
 <div align="center">
