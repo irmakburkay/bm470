@@ -45,6 +45,15 @@ public class BlogController {
         return "blog";
     }
 
+    @PostMapping("/approve")
+    public @ResponseBody String approve(@RequestParam Long blogID) {
+        Blog blog = blogService.loadBlogById(blogID);
+        blog.setIsActive(true);
+        blog.setLastChangeDate(new Date());
+        blogService.updateBlog(blog);
+        return "redirect:/user/" + blog.getUser().getUserID();
+    }
+
     @PostMapping("/delete")
     public @ResponseBody String delete(@RequestParam Long blogID) {
         Blog blog = blogService.loadBlogById(blogID);
@@ -83,6 +92,7 @@ public class BlogController {
             blogService.addBlog(blog);
             model.addAttribute("meesage", "Kayıt Başarılı");
         } else {
+            blog.setUser((User) session.getAttribute("loginUser"));
             blogService.updateBlog(blog);
             model.addAttribute("meesage", "Kayıt Başarılı");
         }
