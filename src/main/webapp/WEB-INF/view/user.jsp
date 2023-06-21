@@ -21,7 +21,6 @@
             $(".card-click").click(function () {
                 var baseUrl = "/bm470/blog/"
                 var id = $(this).data("href")
-                alert("card click: " + id)
                 window.location = baseUrl + id
             })
         })
