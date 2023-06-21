@@ -11,7 +11,6 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import java.io.Serializable;
 import java.util.List;
 
 @Repository
@@ -56,32 +55,6 @@ public class UserDAO {
         } finally {
             session.close();
         }
-    }
-
-    public boolean removeObject(Object object) {
-        boolean success = true;
-        try {
-            getCurrentSession().remove(object);
-        } catch (Exception e) {
-            e.printStackTrace();
-            success = false;
-        }
-        return success;
-    }
-
-    public List<User> getAllUsers(){
-        Session currentSession = getCurrentSession();
-        CriteriaBuilder criteriaBuilder = currentSession.getCriteriaBuilder();
-        CriteriaQuery<User> criteriaQuery = criteriaBuilder.createQuery(User.class);
-        Root<User> root = criteriaQuery.from(User.class);
-
-        criteriaQuery.select(root);
-
-        Query<User> dbQuery = currentSession.createQuery(criteriaQuery);
-        List<User> userList = dbQuery.getResultList();
-
-        currentSession.close();
-        return userList;
     }
 
     public User getUserById(Long id){

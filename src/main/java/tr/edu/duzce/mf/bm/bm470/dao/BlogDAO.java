@@ -66,33 +66,6 @@ public class BlogDAO {
         return success;
     }
 
-    public boolean removeObject(Object object) {
-        boolean success = true;
-        try {
-            getCurrentSession().remove(object);
-        } catch (Exception e) {
-            e.printStackTrace();
-            success = false;
-        }
-        return success;
-    }
-
-    public List<Blog> getAllBlogs() {
-        Session currentSession = getCurrentSession();
-        CriteriaBuilder criteriaBuilder = currentSession.getCriteriaBuilder();
-        CriteriaQuery<Blog> criteriaQuery = criteriaBuilder.createQuery(Blog.class);
-        Root<Blog> root = criteriaQuery.from(Blog.class);
-
-        criteriaQuery.select(root);
-
-        Query<Blog> dbQuery = currentSession.createQuery(criteriaQuery);
-        List<Blog> blogList = dbQuery.getResultList();
-
-        currentSession.close();
-
-        return blogList;
-    }
-
     public List<Blog> getBlogsWithPaging(int pageNumber, int maxResult) {
         Session currentSession = getCurrentSession();
         CriteriaBuilder criteriaBuilder = currentSession.getCriteriaBuilder();
