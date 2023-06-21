@@ -17,7 +17,6 @@
 </head>
 <body>
 <div align="center">
-    <span>${message}</span>
     <form:form method="post" action="/bm470/user/saveuser" modelAttribute="user">
         <table border="0">
             <tr>
@@ -45,7 +44,7 @@
                 </td>
             </tr>
             <tr>
-                <td>Şifre:</td>
+                <td>Şifre (Yeniden):</td>
                 <td><form:password path="passwordRe" id="passwordRe"/></td>
             </tr>
             <tr>
@@ -69,12 +68,17 @@
         </table>
     </form:form>
 
+    <br>
+    <span>Zaten üye misiniz?</span> <a href="/bm470/user/login">Giriş Yapın</a>
+
+    <span hidden>${message}</span>
+
     <!-- Modal -->
     <div class="modal fade" id="registeredModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+                    <h1 class="modal-title fs-5" id="exampleModalLabel"></h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
