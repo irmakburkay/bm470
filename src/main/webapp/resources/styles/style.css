@@ -9,6 +9,9 @@
 .card-click{
     cursor:pointer;
 }
+.paging-click{
+    cursor:pointer;
+}
 .error{
     color: red;
 }

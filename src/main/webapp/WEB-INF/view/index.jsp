@@ -24,7 +24,6 @@
             $(".card-click").click(function () {
                 var baseUrl = "/bm470/blog/"
                 var id = $(this).data("href")
-                alert("af")
                 window.location = baseUrl + id
             })
         })
