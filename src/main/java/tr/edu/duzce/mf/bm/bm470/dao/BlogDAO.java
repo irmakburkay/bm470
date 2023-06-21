@@ -120,7 +120,9 @@ public class BlogDAO {
         CriteriaQuery<Long> criteriaQuery = criteriaBuilder.createQuery(Long.class);
         Root<Blog> root = criteriaQuery.from(Blog.class);
 
-        criteriaQuery.select(criteriaBuilder.count(root));
+        Predicate predicate = criteriaBuilder.equal(root.get("isActive"), 1);
+
+        criteriaQuery.select(criteriaBuilder.count(root)).where(predicate);
 
         Query<Long> dbQuery = currentSession.createQuery(criteriaQuery);
         Long totalCount = dbQuery.getSingleResult();
