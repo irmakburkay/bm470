@@ -100,7 +100,7 @@
                             </div>
                         </div>
                     </div>
-                    <p class="card-text">${blogItem.content}</p>
+                    <p class="card-text text-truncate" style="max-width: 750px;">${blogItem.content}</p>
                     <div class="row justify-content-end">
                         <div class="col-auto">
                             <p class="card-text text-body-secondary">Created: <fmt:formatDate value="${blogItem.creationDate}" pattern="dd/MM/yyyy" /></p>

@@ -59,12 +59,12 @@
 
 <div class="container content" >
 
-    <div class="row">
+    <div class="row m-2 align-items-center">
 
-        <div class="col-md-2">
+        <div class="col-auto">
             <label for="page-size-select" class="form-label">Sayfa Boyutu:</label>
         </div>
-        <div class="col-md-2">
+        <div class="col-auto">
             <select id="page-size-select" class="form-select paging-change">
                 <c:forTokens  var="i" items="5,10,20" delims=",">
                     <option value="${i}" <c:if test='${pageContext.session.getAttribute("maxResult")==i}'>selected</c:if>>${i}</option>
@@ -72,9 +72,9 @@
             </select>
         </div>
 
-        <div class="col align-self-end">
+        <div class="col-auto ms-auto">
             <nav aria-label="Page navigation example">
-                <ul class="pagination justify-content-end">
+                <ul class="pagination">
                     <li class="page-item
                         <c:choose>
                             <c:when test='${pageNumber==0}'>disabled</c:when>
@@ -137,12 +137,7 @@
         <div class="card m-2 p-2 card-click" data-href="${blogItem.blogID}">
             <div class="card-body">
                 <h4 class="card-title">${blogItem.title}</h4>
-                <p class="card-text">
-                    <c:choose>
-                        <c:when test='${fn:length(blogItem.content) > 100}'>${fn:substring(blogItem.content, 0, 100)} ...</c:when>
-                        <c:otherwise>${blogItem.content}</c:otherwise>
-                    </c:choose>
-                </p>
+                <p class="card-text text-truncate" style="max-width: 750px;">${blogItem.content}</p>
                 <div class="row">
                     <c:if test='${pageContext.session.getAttribute("loginUser")==blogItem.user}'>
                         <div class="col">
@@ -191,10 +186,10 @@
         </div>
     </c:forEach>
 
-    <div class="row">
-        <div class="col align-self-end">
+    <div class="row m-2">
+        <div class="col-auto ms-auto">
             <nav aria-label="Page navigation example">
-                <ul class="pagination justify-content-end">
+                <ul class="pagination">
                     <li class="page-item
                         <c:choose>
                             <c:when test='${pageNumber==0}'>disabled</c:when>
