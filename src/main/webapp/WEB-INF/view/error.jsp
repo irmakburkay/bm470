@@ -20,10 +20,8 @@
 
         <h4>Aradığınızı bulamadık gibi görünüyor.</h4>
         <p>${message}</p>
+        <a href="${pageContext.request.contextPath}/" class="btn btn-danger me-2">Anasayfaya Dön</a>
 
-        <div>
-            <a href="${pageContext.request.contextPath}/" class="btn btn-danger me-2">Anasayfaya Dön</a>
-        </div>
     </div>
 </body>
 </html>
