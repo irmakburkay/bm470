@@ -147,7 +147,7 @@ public class UserController {
         user.setIsActive(false);
         userService.updateUser(user);
         logout(session);
-        return "redirect:/";
+        return user.getIsActive() ? "Aktif" : "Deaktif";
     }
 
 }

@@ -52,7 +52,7 @@ public class BlogController {
         blog.setIsActive(true);
         blog.setLastChangeDate(new Date());
         blogService.updateBlog(blog);
-        return "redirect:/user/" + blog.getUser().getUserID();
+        return blog.getIsActive() ? "Aktif" : "Deaktif";
     }
 
     @PostMapping("/delete")
@@ -61,7 +61,7 @@ public class BlogController {
         blog.setIsActive(false);
         blog.setLastChangeDate(new Date());
         blogService.updateBlog(blog);
-        return "redirect:/";
+        return blog.getIsActive() ? "Aktif" : "Deaktif";
     }
 
     @PostMapping("/update")
