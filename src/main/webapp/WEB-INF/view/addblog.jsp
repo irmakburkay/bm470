@@ -18,6 +18,7 @@
 <div class="container content">
   <form:form method="post" action="/bm470/blog/saveblog" modelAttribute="blog">
     <form:hidden path="blogID" id="blogID"/>
+    <form:hidden path="isActive" id="isActive"/>
     <legend>Yeni Blog Yazısı</legend>
 
     <div class="mb-3">
