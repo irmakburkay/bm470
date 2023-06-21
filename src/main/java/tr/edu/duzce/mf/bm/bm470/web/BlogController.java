@@ -14,6 +14,7 @@ import org.springframework.web.servlet.ModelAndView;
 import tr.edu.duzce.mf.bm.bm470.model.Blog;
 import tr.edu.duzce.mf.bm.bm470.model.User;
 import tr.edu.duzce.mf.bm.bm470.service.BlogService;
+import tr.edu.duzce.mf.bm.bm470.util.BlogValidation;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -86,18 +87,32 @@ public class BlogController {
     }
 
     @RequestMapping(value = "/saveblog", method = RequestMethod.POST)
-    public String saveBlog(@ModelAttribute("blog") Blog blog, Model model, HttpSession session){
-        if (blog.getBlogID() == null) {
-            blog.setUser((User) session.getAttribute("loginUser"));
-            blogService.addBlog(blog);
-            model.addAttribute("meesage", "Kayıt Başarılı");
-        } else {
-            blog.setUser((User) session.getAttribute("loginUser"));
-            blogService.updateBlog(blog);
-            model.addAttribute("meesage", "Kayıt Başarılı");
-        }
+    public ModelAndView saveBlog(@ModelAttribute("blog") Blog blog, Model model, HttpSession session){
+        boolean isTitleValid = BlogValidation.isTitleValid(blog.getTitle());
+        boolean isContentValid = BlogValidation.isContentValid(blog.getContent());
 
-        model.addAttribute("blog", blog);
-        return "blog";
+        if(!isTitleValid || !isContentValid){
+            if(!isTitleValid){
+                model.addAttribute("titleValidMessage", "Başlık boş geçilmemeli ve 45 karakterden uzun olmamalıdır.");
+            }
+            if(!isContentValid){
+                model.addAttribute("contentValidMessage", "İçerik boş geçilmemeli ve 450 karakteren kısa olmalıdır");
+            }
+            model.addAttribute("blog", blog);
+            return new ModelAndView("addblog");
+        }
+        else{
+            if (blog.getBlogID() == null) {
+                blog.setUser((User) session.getAttribute("loginUser"));
+                blogService.addBlog(blog);
+                model.addAttribute("meesage", "Kayıt Başarılı");
+            } else {
+                blog.setUser((User) session.getAttribute("loginUser"));
+                blogService.updateBlog(blog);
+                model.addAttribute("meesage", "Kayıt Başarılı");
+            }
+            model.addAttribute("blog", blog);
+        }
+        return new ModelAndView("blog");
     }
 }
