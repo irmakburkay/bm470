@@ -45,6 +45,19 @@ public class UserDAO {
         return success;
     }
 
+    public void updateUser(Object object){
+        Session session = getCurrentSession();
+        try {
+            session.beginTransaction();
+            session.update(object);
+            session.getTransaction().commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+    }
+
     public boolean removeObject(Object object) {
         boolean success = true;
         try {

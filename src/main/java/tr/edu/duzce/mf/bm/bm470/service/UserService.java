@@ -40,4 +40,8 @@ public class UserService {
         return userDAO.checkEmailExists(email);
     }
 
+    public void updateUser(User user) {
+        userDAO.updateUser(user);
+    }
+
 }
