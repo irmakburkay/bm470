@@ -18,7 +18,8 @@
 <jsp:include page="header.jsp"/>
 
 <div class="container content">
-    <%= session.getAttribute("loginUser")%>
+    <a href="${pageContext.request.contextPath}/user/${user.userID}" class="btn btn-secondary">Bloglarım</a>
+    <a href="${pageContext.request.contextPath}/blog/post" class="btn btn-secondary">Blog Yaz</a>
 </div>
 
 <jsp:include page="footer.jsp"/>
