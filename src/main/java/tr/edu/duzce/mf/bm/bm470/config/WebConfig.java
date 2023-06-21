@@ -17,6 +17,7 @@ import tr.edu.duzce.mf.bm.bm470.interceptor.AuthInterceptor;
 
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Configuration
@@ -41,12 +42,6 @@ public class WebConfig implements WebMvcConfigurer {
                 .setCachePeriod(3600)
                 .resourceChain(true)
                 .addResolver(new PathResourceResolver());
-
-        registry.addResourceHandler("/files/**")
-                .addResourceLocations("file:///C:/Users/Burkay/Desktop/")
-                .setCachePeriod(3600)
-                .resourceChain(true)
-                .addResolver(new PathResourceResolver());
     }
 
     @Override
@@ -66,7 +61,14 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         List<String> paths = new ArrayList<>();
-        paths.add("/user/profile");
-        registry.addInterceptor((new AuthInterceptor())).addPathPatterns(paths);
+        paths.add("/user/**");
+        paths.add("/blog/post");
+        paths.add("/blog/approve");
+        paths.add("/blog/delete");
+        paths.add("/blog/update");
+        paths.add("/blog/saveblog");
+        registry.addInterceptor((new AuthInterceptor()))
+                .addPathPatterns(paths)
+                .excludePathPatterns(Arrays.asList("/user/register", "/user/login", "/user/saveuser", "/user/loginUser"));
     }
 }
