@@ -6,6 +6,7 @@ import javax.persistence.*;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Objects;
 
 @Entity
 @Table(name = "blog", schema = "bm470")
@@ -94,5 +95,18 @@ public class Blog implements Serializable {
 
     public void setIsActive(boolean isActive) {
         this.isActive = isActive;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Blog blog = (Blog) o;
+        return Objects.equals(blogID, blog.blogID);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(blogID);
     }
 }

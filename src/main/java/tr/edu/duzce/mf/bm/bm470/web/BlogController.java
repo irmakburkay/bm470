@@ -12,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import tr.edu.duzce.mf.bm.bm470.model.Blog;
+import tr.edu.duzce.mf.bm.bm470.model.User;
 import tr.edu.duzce.mf.bm.bm470.service.BlogService;
 
 import java.text.SimpleDateFormat;
@@ -28,7 +29,7 @@ public class BlogController {
     private BlogService blogService;
 
     @GetMapping("/{blogId}")
-    public ModelAndView getBlogById(@PathVariable("blogId") String stringId, Model model) {
+    public String getBlogById(@PathVariable("blogId") String stringId, Model model, HttpSession session) {
 
         Blog blog;
 
@@ -36,14 +37,37 @@ public class BlogController {
             blog = blogService.loadBlogById(Long.parseLong(stringId));
             if (blog == null) throw new Exception();
         } catch (Exception e) {
-            return new ModelAndView("redirect:/");
+            return "redirect:/";
         }
 
-        List<Blog> blogList = new ArrayList<>();
-        blogList.add(blog);
-        model.addAttribute("blogList", blogList);
+        model.addAttribute("blog", blog);
 
-        return new ModelAndView("blog");
+        return "blog";
+    }
+
+    @PostMapping("/approve")
+    public @ResponseBody String approve(@RequestParam Long blogID) {
+        Blog blog = blogService.loadBlogById(blogID);
+        blog.setIsActive(true);
+        blog.setLastChangeDate(new Date());
+        blogService.updateBlog(blog);
+        return "redirect:/user/" + blog.getUser().getUserID();
+    }
+
+    @PostMapping("/delete")
+    public @ResponseBody String delete(@RequestParam Long blogID) {
+        Blog blog = blogService.loadBlogById(blogID);
+        blog.setIsActive(false);
+        blog.setLastChangeDate(new Date());
+        blogService.updateBlog(blog);
+        return "redirect:/";
+    }
+
+    @PostMapping("/update")
+    public String update(@RequestParam Long blogID, Model model) {
+        Blog blog = blogService.loadBlogById(blogID);
+        model.addAttribute("blog", blog);
+        return "addblog";
     }
 
     private String convertTime(Date time) {
@@ -62,10 +86,17 @@ public class BlogController {
     }
 
     @RequestMapping(value = "/saveblog", method = RequestMethod.POST)
-    public String saveBlog(@ModelAttribute("blog") Blog blog, Model model){
-        blogService.addBlog(blog);
+    public String saveBlog(@ModelAttribute("blog") Blog blog, Model model, HttpSession session){
+        if (blog.getBlogID() == null) {
+            blog.setUser((User) session.getAttribute("loginUser"));
+            blogService.addBlog(blog);
+            model.addAttribute("meesage", "Kayıt Başarılı");
+        } else {
+            blog.setUser((User) session.getAttribute("loginUser"));
+            blogService.updateBlog(blog);
+            model.addAttribute("meesage", "Kayıt Başarılı");
+        }
 
-        model.addAttribute("meesage", "Kayıt Başarılı");
         model.addAttribute("blog", blog);
         return "blog";
     }
