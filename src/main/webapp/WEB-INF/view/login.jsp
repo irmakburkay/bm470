@@ -37,6 +37,9 @@
             </tr>
         </table>
     </form:form>
+
+    <br>
+    <span>Hesabınız yok mu?</span> <a href="/bm470/user/register">Kayıt Olun</a>
 </div>
 
 
