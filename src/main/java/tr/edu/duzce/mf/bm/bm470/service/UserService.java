@@ -7,8 +7,6 @@ import org.springframework.transaction.annotation.Transactional;
 import tr.edu.duzce.mf.bm.bm470.dao.UserDAO;
 import tr.edu.duzce.mf.bm.bm470.model.User;
 
-import java.util.List;
-
 @Service
 @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
 public class UserService {
@@ -18,11 +16,6 @@ public class UserService {
 
     public void addUser(User user) {
         userDAO.saveOrUpdateObject(user);
-    }
-
-    public List<User> loadUsers() {
-        List<User> userList = userDAO.getAllUsers();
-        return userList;
     }
 
     public User getUserById(Long id){

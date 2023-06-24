@@ -26,11 +26,6 @@ public class BlogService {
         blogDAO.updateObject(blog);
     }
 
-    public List<Blog> loadBlogs() {
-        List<Blog> blogList = blogDAO.getAllBlogs();
-        return blogList;
-    }
-
     public List<Blog> loadBlogsWithPaging(int pageNumber, int maxResult) {
         List<Blog> blogList = blogDAO.getBlogsWithPaging(pageNumber, maxResult);
         return blogList;

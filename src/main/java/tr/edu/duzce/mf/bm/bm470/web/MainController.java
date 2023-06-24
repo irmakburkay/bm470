@@ -3,20 +3,20 @@ package tr.edu.duzce.mf.bm.bm470.web;
 import com.thedeanda.lorem.Lorem;
 import com.thedeanda.lorem.LoremIpsum;
 import jakarta.servlet.http.HttpSession;
-import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import tr.edu.duzce.mf.bm.bm470.model.Blog;
 import tr.edu.duzce.mf.bm.bm470.model.User;
 import tr.edu.duzce.mf.bm.bm470.service.BlogService;
 import tr.edu.duzce.mf.bm.bm470.service.UserService;
 
-import java.nio.charset.Charset;
-import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
 
 @Controller
 @RequestMapping(value = "/", method = RequestMethod.GET)
@@ -46,16 +46,6 @@ public class MainController {
             session.setAttribute("login_logout_link", "logout");
             session.setAttribute("register_profile_link", "profile");
         }
-
-//        Random r = new Random();
-//        String alphabet = "abcdefghijklmnopqrstuvwxyz";
-//        String number = "0123456789";
-//        StringBuilder username = new StringBuilder();
-//        StringBuilder password = new StringBuilder();
-//        for (int i = 0; i < 6; i++)
-//            username.append(alphabet.charAt(r.nextInt(alphabet.length())));
-//        for (int i = 0; i < 4; i++)
-//            password.append(number.charAt(r.nextInt(number.length())));
 
         Lorem lorem = LoremIpsum.getInstance();
 
@@ -109,18 +99,11 @@ public class MainController {
             return "redirect:/page?pageNumber=" + pageNumber + "&maxResult=" + maxResult;
 
         List<Blog> blogList = blogService.loadBlogsWithPaging(pageNumber, maxResult);
-//        session.setAttribute("loginUser", blogList.get(1).getUser());
 
         model.addAttribute("blogList", blogList);
         model.addAttribute("pageSize", pageSize);
         model.addAttribute("pageNumber", pageNumber);
         return "index";
-    }
-
-    private String convertTime(Long timeAsLong) {
-        Date time = new Date(timeAsLong);
-        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss dd/MM/yyyy");
-        return sdf.format(time);
     }
 
 }

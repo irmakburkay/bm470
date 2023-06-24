@@ -12,7 +12,6 @@ import tr.edu.duzce.mf.bm.bm470.service.BlogService;
 import tr.edu.duzce.mf.bm.bm470.service.UserService;
 import tr.edu.duzce.mf.bm.bm470.util.UserValidation;
 
-import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -147,7 +146,7 @@ public class UserController {
         user.setIsActive(false);
         userService.updateUser(user);
         logout(session);
-        return "redirect:/";
+        return user.getIsActive() ? "Aktif" : "Deaktif";
     }
 
 }

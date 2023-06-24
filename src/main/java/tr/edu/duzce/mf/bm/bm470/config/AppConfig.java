@@ -43,23 +43,6 @@ public class AppConfig {
         props.put(C3P0_MAX_STATEMENTS, env.getProperty("hibernate.c3p0.max_statements"));
         props.put(C3P0_CONFIG_PREFIX + ".initialPoolSize", env.getProperty("hibernate.c3p0.initialPoolSize"));
 
-//        props.put(DRIVER, "com.mysql.cj.jdbc.Driver");
-//        props.put(URL, "jdbc:mysql://localhost:3306/bm470");
-//        props.put(USER, "root");
-//        props.put(PASS, "raspberry");
-//
-//        props.put(SHOW_SQL, "true");
-//        props.put(HBM2DDL_AUTO, "update");
-//        props.put(DIALECT, "org.hibernate.dialect.MySQL5InnoDBDialect");
-//
-//        props.put(C3P0_MIN_SIZE, "5");
-//        props.put(C3P0_MAX_SIZE, "20");
-//        props.put(C3P0_ACQUIRE_INCREMENT, "1");
-//        props.put(C3P0_TIMEOUT, "1800");
-//        props.put(C3P0_MAX_STATEMENTS, "50");
-//        props.put(C3P0_CONFIG_PREFIX + ".initialPoolSize", "5");
-
-
         factoryBean.setHibernateProperties(props);
         factoryBean.setAnnotatedClasses(Blog.class, User.class);
         return factoryBean;

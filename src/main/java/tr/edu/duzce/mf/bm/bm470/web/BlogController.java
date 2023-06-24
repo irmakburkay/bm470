@@ -1,12 +1,7 @@
 package tr.edu.duzce.mf.bm.bm470.web;
 
-import com.mysql.cj.xdevapi.JsonParser;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -16,11 +11,7 @@ import tr.edu.duzce.mf.bm.bm470.model.User;
 import tr.edu.duzce.mf.bm.bm470.service.BlogService;
 import tr.edu.duzce.mf.bm.bm470.util.BlogValidation;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
 
 @Controller
 @RequestMapping(value = "/blog/*")
@@ -52,7 +43,7 @@ public class BlogController {
         blog.setIsActive(true);
         blog.setLastChangeDate(new Date());
         blogService.updateBlog(blog);
-        return "redirect:/user/" + blog.getUser().getUserID();
+        return blog.getIsActive() ? "Aktif" : "Deaktif";
     }
 
     @PostMapping("/delete")
@@ -61,7 +52,7 @@ public class BlogController {
         blog.setIsActive(false);
         blog.setLastChangeDate(new Date());
         blogService.updateBlog(blog);
-        return "redirect:/";
+        return blog.getIsActive() ? "Aktif" : "Deaktif";
     }
 
     @PostMapping("/update")
@@ -69,11 +60,6 @@ public class BlogController {
         Blog blog = blogService.loadBlogById(blogID);
         model.addAttribute("blog", blog);
         return "addblog";
-    }
-
-    private String convertTime(Date time) {
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-        return sdf.format(time);
     }
 
     @ModelAttribute("blog")
