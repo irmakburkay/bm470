@@ -58,7 +58,7 @@
                     </div>
                     <c:if test='${pageContext.session.getAttribute("loginUser")==blog.user}'>
                         <div class="col">
-                        <div class="row justify-content-end">
+                            <div class="row justify-content-end">
                             <div class="col-auto">
                                 <form action="/bm470/blog/update" method="post">
                                     <input type="hidden" name="blogID" value="${blog.blogID}"/>
